@@ -117,6 +117,8 @@ public abstract class BaseDDMTestCase extends PowerMockito {
 		setUpResourceBundleUtil();
 	}
 
+
+
 	protected void addDDMFormFields(
 		DDMForm ddmForm, DDMFormField... ddmFormFieldsArray) {
 
