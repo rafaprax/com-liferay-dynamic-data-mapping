@@ -10,10 +10,12 @@
 /**
  * Prints the DDM form text field.
  *
+ * @param? availableLocalesMetadata
  * @param? childElementsHTML
  * @param dir
  * @param displayStyle
  * @param? label
+ * @param localizable
  * @param name
  * @param placeholder
  * @param predefinedValue
@@ -43,13 +45,23 @@
 			{/if}
 		{/if}
 
-		<div class="input-group-container {if $tooltip}input-group-default{/if}">
+		<div class="input-group-container {if $localizable}input-localized{/if} {if $tooltip}input-group-default{/if}">
 			{if $displayStyle == 'multiline'}
-				<textarea class="field form-control" dir="{$dir}" id="{$name}" name="{$name}" placeholder="{$placeholder}" {if $readOnly}readonly{/if} >
+				<textarea {if $localizable}aria-describedby="{$name}_desc"{/if} class="field form-control {if $localizable}language-value{/if}" dir="{$dir}" id="{$name}" name="{$name}" placeholder="{$placeholder}" {if $readOnly}readonly{/if} >
 					{$displayValue}
 				</textarea>
 			{else}
-				<input class="field form-control" dir="{$dir}" id="{$name}" name="{$name}" placeholder="{$placeholder}" {if $readOnly}readonly{/if} type="text" value="{$displayValue}">
+				<input {if $localizable}aria-describedby="{$name}_desc"{/if} class="field form-control {if $localizable}language-value{/if}" dir="{$dir}" id="{$name}" name="{$name}" placeholder="{$placeholder}" {if $readOnly}readonly{/if} type="text" value="{$displayValue}">
+			{/if}
+
+			{if $localizable}
+				<div class="input-localized-content hidden" id="{$name}ContentBox" role="menu">
+					{if $availableLocalesMetadata}
+						{call ddm.available_locales data="all"}
+							{param availableLocalesMetadata: $availableLocalesMetadata /}
+						{/call}
+					{/if}
+				</div>
 			{/if}
 
 			{if $tooltip}
@@ -65,4 +77,46 @@
 			{$childElementsHTML|noAutoescape}
 		{/if}
 	</div>
+{/template}
+
+/**
+ * Prints a list of flags based on available locales.
+ *
+ * @param availableLocalesMetadata
+ */
+{template .available_locales autoescape="deprecated-contextual"}
+	<div class="palette-container">
+		<ul class="palette-items-container">
+			{foreach $localeMetadata in $availableLocalesMetadata}
+				{call ddm.flag data="all"}
+					{param icon: $localeMetadata.icon /}
+					{param index: index($localeMetadata) /}
+					{param label: $localeMetadata.label /}
+					{param languageId: $localeMetadata.languageId /}
+				{/call}
+			{/foreach}
+		</ul>
+	</div>
+{/template}
+
+/**
+ * Prints a flag
+ *
+ * @param icon
+ * @param index
+ * @param label
+ * @param languageId
+ */
+{template .flag autoescape="deprecated-contextual"}
+	<li class="palette-item {if $index == 0}palette-item-selected lfr-input-localized-default{/if}" data-index="{$index}" data-title="{$label}" data-value="{$languageId}" role="menuitem" style="display: inline-block;">
+		<a class="palette-item-inner" data-languageid="{$languageId}" href="javascript:;">
+			<span class="lfr-input-localized-flag">
+				<svg class="lexicon-icon">
+					<use xlink:href="{$icon}" />
+				</svg>
+			</span>
+
+			<div class="lfr-input-localized-state"></div>
+		</a>
+	</li>
 {/template}
