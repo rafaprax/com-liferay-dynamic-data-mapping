@@ -23,6 +23,11 @@ AUI.add(
 						value: 'singleline'
 					},
 
+					localizable: {
+						state: true,
+						value: false
+					},
+
 					options: {
 						value: []
 					},
@@ -36,6 +41,10 @@ AUI.add(
 						value: 'text'
 					}
 				},
+
+				AUGMENTS: [
+					Liferay.DDM.Field.TextFieldTranslationSupport
+				],
 
 				EXTENDS: Liferay.DDM.Renderer.Field,
 
@@ -192,6 +201,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-autosize-deprecated', 'aui-tooltip', 'autocomplete', 'autocomplete-filters', 'autocomplete-highlighters', 'autocomplete-highlighters-accentfold', 'liferay-ddm-form-renderer-field']
+		requires: ['aui-autosize-deprecated', 'aui-tooltip', 'autocomplete', 'autocomplete-filters', 'autocomplete-highlighters', 'autocomplete-highlighters-accentfold', 'liferay-ddm-form-field-text-translation-support', 'liferay-ddm-form-renderer-field']
 	}
 );

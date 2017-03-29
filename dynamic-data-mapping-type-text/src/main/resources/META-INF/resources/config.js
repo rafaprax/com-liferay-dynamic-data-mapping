@@ -21,6 +21,14 @@
 								'liferay-ddm-form-renderer-field'
 							]
 						},
+						'liferay-ddm-form-field-text-translation-support': {
+							path: 'text_translation_support.js',
+							requires: [
+								'liferay-ddm-form-field-text-template',
+								'liferay-ddm-soy-template-util',
+								 'liferay-input-localized'
+							]
+						},
 						'liferay-ddm-form-field-text-template': {
 							condition: {
 								trigger: 'liferay-ddm-form-renderer'
