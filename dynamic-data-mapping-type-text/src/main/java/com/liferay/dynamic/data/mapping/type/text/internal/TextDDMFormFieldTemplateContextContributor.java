@@ -59,6 +59,8 @@ public class TextDDMFormFieldTemplateContextContributor
 			GetterUtil.getString(
 				ddmFormField.getProperty("displayStyle"), "singleline"));
 
+		parameters.put("localizable", ddmFormField.isLocalizable());
+
 		LocalizedValue placeholder = (LocalizedValue)ddmFormField.getProperty(
 			"placeholder");
 
