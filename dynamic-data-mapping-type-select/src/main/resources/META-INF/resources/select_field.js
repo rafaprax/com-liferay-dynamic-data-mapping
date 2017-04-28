@@ -21,6 +21,8 @@ AUI.add(
 
 		var CSS_SELECT_OPTION_ITEM = A.getClassName('select', 'option', 'item');
 
+		var CSS_SELECT_RESULTS_CHOSEN = A.getClassName('results', 'chosen');
+
 		var CSS_SELECT_TRIGGER_ACTION = A.getClassName('select', 'field', 'trigger');
 
 		var Lang = A.Lang;
@@ -225,6 +227,12 @@ AUI.add(
 							);
 						}
 
+						var listNode = instance.get('container').one('.' + CSS_SELECT_RESULTS_CHOSEN);
+
+						if (listNode) {
+							listNode.on('scroll', instance._handleScrollList, instance);
+						}
+
 						return instance;
 					},
 
@@ -413,6 +421,22 @@ AUI.add(
 						instance.focus();
 					},
 
+					_handleScrollList: function(event) {
+						var instance = this;
+
+						var listNode = event.currentTarget;
+
+						var innerHeight = listNode.innerHeight();
+
+						var scrollHeight = listNode.get('scrollHeight');
+
+						var scrollTop = listNode.get('scrollTop');
+
+						if (scrollTop + innerHeight === scrollHeight) {
+							instance._onScrollBottom();
+						}
+					},
+
 					_handleSelectTriggerClick: function(event) {
 						var instance = this;
 
@@ -478,6 +502,12 @@ AUI.add(
 						}
 
 						return false;
+					},
+
+					_onScrollBottom: function() {
+						var instance = this;
+
+						console.log('Bottom fire!!!');
 					},
 
 					_removeBadge: function(value) {
