@@ -118,12 +118,16 @@ public class DDMFormTemplateContextFactoryImpl
 
 		templateContext.put("containerId", containerId);
 
-		templateContext.put(
+		ddmFormRenderingContext.addProperty(
 			"dataProviderSettings",
 			_ddmFormTemplateContextFactoryHelper.getDataProviderSettings(
 				ddmForm));
 
 		setDDMFormFieldsEvaluableProperty(ddmForm);
+
+		templateContext.put(
+			"dataProviderPaginatorServletURL",
+			getDDMDataProviderPaginatorServletURL());
 
 		templateContext.put(
 			"evaluatorURL", getDDMFormContextProviderServletURL());
@@ -182,8 +186,17 @@ public class DDMFormTemplateContextFactoryImpl
 		return templateContext;
 	}
 
+	protected String getDDMDataProviderPaginatorServletURL() {
+		String servletContextPath = getServletContextPath(
+			_ddmFormContextProviderServlet);
+
+		return servletContextPath.concat(
+			"/dynamic-data-mapping-data-provider-paginator/");
+	}
+
 	protected String getDDMFormContextProviderServletURL() {
-		String servletContextPath = getServletContextPath();
+		String servletContextPath = getServletContextPath(
+			_ddmFormContextProviderServlet);
 
 		return servletContextPath.concat(
 			"/dynamic-data-mapping-form-context-provider/");
@@ -248,9 +261,8 @@ public class DDMFormTemplateContextFactoryImpl
 		return new AggregateResourceBundle(resourceBundlesArray);
 	}
 
-	protected String getServletContextPath() {
-		ServletConfig servletConfig =
-			_ddmFormContextProviderServlet.getServletConfig();
+	protected String getServletContextPath(Servlet servlet) {
+		ServletConfig servletConfig = servlet.getServletConfig();
 
 		ServletContext servletContext = servletConfig.getServletContext();
 
@@ -320,6 +332,11 @@ public class DDMFormTemplateContextFactoryImpl
 
 	private DDMFormTemplateContextFactoryHelper
 		_ddmFormTemplateContextFactoryHelper;
+
+	@Reference(
+		target = "(osgi.http.whiteboard.servlet.name=com.liferay.dynamic.data.mapping.data.provider.internal.servlet.DDMDataProviderPaginatorServlet)"
+	)
+	private Servlet _getDDMDataProviderPaginatorServletURLgetDDMDataProviderPaginatorServletURL;
 
 	@Reference
 	private JSONFactory _jsonFactory;

@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import org.osgi.service.component.annotations.Component;
@@ -68,14 +70,7 @@ public class SelectDDMFormFieldTemplateContextContributor
 			"multiple",
 			ddmFormField.isMultiple() ? "multiple" : StringPool.BLANK);
 
-		DDMFormFieldOptions ddmFormFieldOptions =
-			ddmFormFieldOptionsFactory.create(
-				ddmFormField, ddmFormFieldRenderingContext);
-
-		parameters.put(
-			"options",
-			getOptions(
-				ddmFormFieldOptions, ddmFormFieldRenderingContext.getLocale()));
+		setOptions(ddmFormField, ddmFormFieldRenderingContext, parameters);
 
 		Map<String, String> stringsMap = new HashMap<>();
 
@@ -97,6 +92,29 @@ public class SelectDDMFormFieldTemplateContextContributor
 			"value", getValue(ddmFormFieldRenderingContext.getValue()));
 
 		return parameters;
+	}
+
+	protected void setOptions(DDMFormField ddmFormField,
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
+		Map<String, Object> parameters) {
+
+		String dataSourceType = GetterUtil.getString(
+			ddmFormField.getProperty("dataSourceType"), "manual");
+
+		List<Object> options = new ArrayList<>();
+
+		if (Objects.equals(dataSourceType, "manual")) {
+
+			DDMFormFieldOptions ddmFormFieldOptions =
+				ddmFormFieldOptionsFactory.create(
+					ddmFormField, ddmFormFieldRenderingContext);
+
+			options = getOptions(
+				ddmFormFieldOptions, ddmFormFieldRenderingContext.getLocale());
+		}
+
+		parameters.put("options", options);
+
 	}
 
 	protected List<Object> getOptions(

@@ -110,6 +110,21 @@ AUI.add(
 				instance.get('container').one('.results-chosen').setHTML(template);
 			},
 
+			_renderMoreOptionsList: function(options) {
+				var instance = this;
+
+				var template = instance._getTemplate(
+					{
+						multiple: instance.get('multiple'),
+						options: options,
+						strings: instance.get('strings'),
+						value: instance.getValueSelected()
+					}
+				);
+
+				instance.get('container').one('.results-chosen').append(template);
+			},
+
 			_visitDOMListItems: function(callBack) {
 				var instance = this;
 
