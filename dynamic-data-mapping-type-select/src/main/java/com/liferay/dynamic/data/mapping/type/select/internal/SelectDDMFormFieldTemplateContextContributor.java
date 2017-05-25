@@ -29,6 +29,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -135,9 +136,17 @@ public class SelectDDMFormFieldTemplateContextContributor
 		String dataSourceType = GetterUtil.getString(
 			ddmFormField.getProperty("dataSourceType"), "manual");
 
+		Map<String, Object> dataProviderSettings =
+			(Map<String, Object>)
+				ddmFormFieldRenderingContext.getProperty(
+					"dataProviderSettings");
+
 		List<Object> options = new ArrayList<>();
 
-		if (Objects.equals(dataSourceType, "manual")) {
+		if (Objects.equals(dataSourceType, "manual") ||
+			(Objects.equals(dataSourceType, "data-provider") &&
+			 MapUtil.isEmpty(dataProviderSettings))) {
+
 			DDMFormFieldOptions ddmFormFieldOptions =
 				ddmFormFieldOptionsFactory.create(
 					ddmFormField, ddmFormFieldRenderingContext);

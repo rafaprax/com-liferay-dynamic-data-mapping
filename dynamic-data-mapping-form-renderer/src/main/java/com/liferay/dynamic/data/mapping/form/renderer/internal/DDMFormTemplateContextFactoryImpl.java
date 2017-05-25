@@ -188,7 +188,7 @@ public class DDMFormTemplateContextFactoryImpl
 
 	protected String getDDMDataProviderPaginatorServletURL() {
 		String servletContextPath = getServletContextPath(
-			_ddmFormContextProviderServlet);
+			_ddmDataProviderPaginatorServlet);
 
 		return servletContextPath.concat(
 			"/dynamic-data-mapping-data-provider-paginator/");
@@ -311,6 +311,11 @@ public class DDMFormTemplateContextFactoryImpl
 	private DDMDataProviderInstanceService _ddmDataProviderInstanceService;
 
 	@Reference(
+		target = "(osgi.http.whiteboard.servlet.name=com.liferay.dynamic.data.mapping.data.provider.internal.servlet.DDMDataProviderPaginatorServlet)"
+	)
+	private Servlet _ddmDataProviderPaginatorServlet;
+
+	@Reference(
 		target = "(osgi.http.whiteboard.servlet.name=com.liferay.dynamic.data.mapping.form.renderer.internal.servlet.DDMFormContextProviderServlet)"
 	)
 	private Servlet _ddmFormContextProviderServlet;
@@ -332,11 +337,6 @@ public class DDMFormTemplateContextFactoryImpl
 
 	private DDMFormTemplateContextFactoryHelper
 		_ddmFormTemplateContextFactoryHelper;
-
-	@Reference(
-		target = "(osgi.http.whiteboard.servlet.name=com.liferay.dynamic.data.mapping.data.provider.internal.servlet.DDMDataProviderPaginatorServlet)"
-	)
-	private Servlet _getDDMDataProviderPaginatorServletURLgetDDMDataProviderPaginatorServletURL;
 
 	@Reference
 	private JSONFactory _jsonFactory;
