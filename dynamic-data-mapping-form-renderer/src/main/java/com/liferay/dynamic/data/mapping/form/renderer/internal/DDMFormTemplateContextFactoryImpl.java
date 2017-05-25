@@ -126,6 +126,10 @@ public class DDMFormTemplateContextFactoryImpl
 		setDDMFormFieldsEvaluableProperty(ddmForm);
 
 		templateContext.put(
+			"dataProviderPaginatorServletURL",
+			getDDMDataProviderPaginatorServletURL());
+
+		templateContext.put(
 			"evaluatorURL", getDDMFormContextProviderServletURL());
 
 		List<DDMFormFieldType> ddmFormFieldTypes =
@@ -184,8 +188,17 @@ public class DDMFormTemplateContextFactoryImpl
 		return templateContext;
 	}
 
+	protected String getDDMDataProviderPaginatorServletURL() {
+		String servletContextPath = getServletContextPath(
+			_ddmDataProviderPaginatorServlet);
+
+		return servletContextPath.concat(
+			"/dynamic-data-mapping-data-provider-paginator/");
+	}
+
 	protected String getDDMFormContextProviderServletURL() {
-		String servletContextPath = getServletContextPath();
+		String servletContextPath = getServletContextPath(
+			_ddmFormContextProviderServlet);
 
 		return servletContextPath.concat(
 			"/dynamic-data-mapping-form-context-provider/");
@@ -250,9 +263,8 @@ public class DDMFormTemplateContextFactoryImpl
 		return new AggregateResourceBundle(resourceBundlesArray);
 	}
 
-	protected String getServletContextPath() {
-		ServletConfig servletConfig =
-			_ddmFormContextProviderServlet.getServletConfig();
+	protected String getServletContextPath(Servlet servlet) {
+		ServletConfig servletConfig = servlet.getServletConfig();
 
 		ServletContext servletContext = servletConfig.getServletContext();
 
@@ -299,6 +311,11 @@ public class DDMFormTemplateContextFactoryImpl
 
 	@Reference
 	private DDMDataProviderInstanceService _ddmDataProviderInstanceService;
+
+	@Reference(
+		target = "(osgi.http.whiteboard.servlet.name=com.liferay.dynamic.data.mapping.data.provider.internal.servlet.DDMDataProviderPaginatorServlet)"
+	)
+	private Servlet _ddmDataProviderPaginatorServlet;
 
 	@Reference(
 		target = "(osgi.http.whiteboard.servlet.name=com.liferay.dynamic.data.mapping.form.renderer.internal.servlet.DDMFormContextProviderServlet)"
