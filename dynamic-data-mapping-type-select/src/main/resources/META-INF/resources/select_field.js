@@ -546,8 +546,6 @@ AUI.add(
 
 						loadingIcon.show();
 
-						instance._isInLoadMoreProcess = true;
-
 						var formContext = instance.getRoot().get('context');
 
 						A.io.request(
@@ -564,14 +562,14 @@ AUI.add(
 
 											var currentOptionsSize = options.length;
 
+											Array.prototype.push.apply(options, newOptions);
+
 											if (currentOptionsSize == 0) {
 												instance._renderList(options);
 											}
 											else {
 												instance._renderMoreOptionsList(newOptions);
 											}
-
-											instance.set('options', options.concat(newOptions));
 
 											loadingIcon.hide();
 
@@ -587,7 +585,6 @@ AUI.add(
 											instance._hasMoreOption = false;
 										}
 
-										instance._isInLoadMoreProcess = false;
 									}
 								}
 							}
@@ -597,7 +594,7 @@ AUI.add(
 					_onOptionsChange: function(event) {
 						var instance = this;
 
-						if (!instance._hasDataProviderSettings() || instance._isInLoadMoreProcess) {
+						if (!instance._hasDataProviderSettings()) {
 							return;
 						}
 
