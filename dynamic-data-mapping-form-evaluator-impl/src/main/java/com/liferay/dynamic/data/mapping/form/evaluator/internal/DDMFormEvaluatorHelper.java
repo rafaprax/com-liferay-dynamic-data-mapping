@@ -41,8 +41,6 @@ import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.storage.FieldConstants;
-import com.liferay.portal.kernel.json.JSONArray;
-import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -157,20 +155,8 @@ public class DDMFormEvaluatorHelper {
 		setDDMFormFieldEvaluationResultValidation(
 			ddmFormFieldEvaluationResult, ddmFormField, ddmFormFieldValue);
 
-		String type = ddmFormField.getType();
-
-		String valueString = getValueString(ddmFormFieldValue.getValue(), type);
-
-		if (Objects.equals(type, "validation")) {
-			ddmFormFieldEvaluationResult.setValue(valueString);
-
-			return ddmFormFieldEvaluationResult;
-		}
-
-		Object value = FieldConstants.getSerializable(
-			ddmFormField.getDataType(), valueString);
-
-		ddmFormFieldEvaluationResult.setValue(value);
+		ddmFormFieldEvaluationResult.setValue(
+			getValue(ddmFormField, ddmFormFieldValue));
 
 		return ddmFormFieldEvaluationResult;
 	}
@@ -355,36 +341,17 @@ public class DDMFormEvaluatorHelper {
 		return disabledPagesIndexes;
 	}
 
-	protected String getJSONArrayValueString(String valueString) {
-		try {
-			JSONArray jsonArray = _jsonFactory.createJSONArray(valueString);
+	protected Object getValue(
+		DDMFormField ddmFormField, DDMFormFieldValue ddmFormFieldValue) {
 
-			return jsonArray.getString(0);
-		}
-		catch (JSONException jsone) {
-
-			// LPS-52675
-
-			if (_log.isDebugEnabled()) {
-				_log.debug(jsone, jsone);
-			}
-
-			return valueString;
-		}
-	}
-
-	protected String getValueString(Value value, String type) {
-		if (value == null) {
+		if (ddmFormFieldValue == null) {
 			return null;
 		}
 
-		String valueString = GetterUtil.getString(value.getString(_locale));
+		DDMFormFieldValueAccessor<Object> ddmFormFieldValueAccessor =
+			getDDMFormFieldValueAccessor(ddmFormField);
 
-		if (type.equals("select") || type.equals("radio")) {
-			valueString = getJSONArrayValueString(valueString);
-		}
-
-		return valueString;
+		return ddmFormFieldValueAccessor.getValue(ddmFormFieldValue, _locale);
 	}
 
 	protected boolean isDDMFormFieldValueEmpty(
@@ -481,26 +448,24 @@ public class DDMFormEvaluatorHelper {
 				selectedDDMFormFieldValue = ddmFormFieldValue;
 			}
 
-			String valueString = getValueString(
-				selectedDDMFormFieldValue.getValue(), ddmFormField.getType());
+			Object value = getValue(ddmFormField, selectedDDMFormFieldValue);
 
 			String dataType = ddmFormField.getDataType();
 
 			if (FieldConstants.isNumericType(ddmFormField.getDataType())) {
-				if (Validator.isNotNull(valueString)) {
+				if (Validator.isNotNull(value)) {
 					ddmExpression.setDoubleVariableValue(
-						ddmFormFieldName, GetterUtil.getDouble(valueString));
+						ddmFormFieldName, GetterUtil.getDouble(value));
 				}
 			}
 			else if (dataType.equals(FieldConstants.BOOLEAN)) {
-				if (Validator.isNotNull(valueString)) {
+				if (Validator.isNotNull(value)) {
 					ddmExpression.setBooleanVariableValue(
-						ddmFormFieldName, GetterUtil.getBoolean(valueString));
+						ddmFormFieldName, GetterUtil.getBoolean(value));
 				}
 			}
 			else {
-				ddmExpression.setStringVariableValue(
-					ddmFormFieldName, valueString);
+				ddmExpression.setObjectVariableValue(ddmFormFieldName, value);
 			}
 		}
 	}
