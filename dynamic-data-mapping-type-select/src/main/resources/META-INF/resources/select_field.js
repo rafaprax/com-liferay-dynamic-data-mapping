@@ -342,12 +342,6 @@ AUI.add(
 						return value;
 					},
 
-					_setOptions: function(options) {
-						var instance = this;
-
-						console.log("test");
-					},
-
 					_getOptions: function(options) {
 						return options || [];
 					},

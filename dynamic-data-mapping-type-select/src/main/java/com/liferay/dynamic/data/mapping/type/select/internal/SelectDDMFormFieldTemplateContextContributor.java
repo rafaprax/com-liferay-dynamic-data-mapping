@@ -29,7 +29,6 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
-import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -94,29 +93,6 @@ public class SelectDDMFormFieldTemplateContextContributor
 		return parameters;
 	}
 
-	protected void setOptions(DDMFormField ddmFormField,
-		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
-		Map<String, Object> parameters) {
-
-		String dataSourceType = GetterUtil.getString(
-			ddmFormField.getProperty("dataSourceType"), "manual");
-
-		List<Object> options = new ArrayList<>();
-
-		if (Objects.equals(dataSourceType, "manual")) {
-
-			DDMFormFieldOptions ddmFormFieldOptions =
-				ddmFormFieldOptionsFactory.create(
-					ddmFormField, ddmFormFieldRenderingContext);
-
-			options = getOptions(
-				ddmFormFieldOptions, ddmFormFieldRenderingContext.getLocale());
-		}
-
-		parameters.put("options", options);
-
-	}
-
 	protected List<Object> getOptions(
 		DDMFormFieldOptions ddmFormFieldOptions, Locale locale) {
 
@@ -149,6 +125,28 @@ public class SelectDDMFormFieldTemplateContextContributor
 		String[] valuesStringArray = toStringArray(valueString);
 
 		return ListUtil.toList(valuesStringArray);
+	}
+
+	protected void setOptions(
+		DDMFormField ddmFormField,
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext,
+		Map<String, Object> parameters) {
+
+		String dataSourceType = GetterUtil.getString(
+			ddmFormField.getProperty("dataSourceType"), "manual");
+
+		List<Object> options = new ArrayList<>();
+
+		if (Objects.equals(dataSourceType, "manual")) {
+			DDMFormFieldOptions ddmFormFieldOptions =
+				ddmFormFieldOptionsFactory.create(
+					ddmFormField, ddmFormFieldRenderingContext);
+
+			options = getOptions(
+				ddmFormFieldOptions, ddmFormFieldRenderingContext.getLocale());
+		}
+
+		parameters.put("options", options);
 	}
 
 	protected String[] toStringArray(String value) {
