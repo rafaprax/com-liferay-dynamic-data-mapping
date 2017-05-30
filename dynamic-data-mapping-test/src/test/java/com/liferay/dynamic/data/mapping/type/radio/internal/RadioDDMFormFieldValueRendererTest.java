@@ -54,7 +54,7 @@ public class RadioDDMFormFieldValueRendererTest {
 
 		DDMFormFieldValue ddmFormFieldValue =
 			DDMFormValuesTestUtil.createDDMFormFieldValue(
-				"Radio", new UnlocalizedValue("[\"value 1\"]"));
+				"Radio", new UnlocalizedValue("value 1"));
 
 		ddmFormValues.addDDMFormFieldValue(ddmFormFieldValue);
 

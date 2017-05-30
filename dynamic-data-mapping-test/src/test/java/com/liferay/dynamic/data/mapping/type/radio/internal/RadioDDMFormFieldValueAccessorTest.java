@@ -31,7 +31,7 @@ public class RadioDDMFormFieldValueAccessorTest {
 	public void testGetRadioValue() {
 		DDMFormFieldValue ddmFormFieldValue =
 			DDMFormValuesTestUtil.createDDMFormFieldValue(
-				"Radio", new UnlocalizedValue("[\"value 1\"]"));
+				"Radio", new UnlocalizedValue("value 1"));
 
 		RadioDDMFormFieldValueAccessor radioDDMFormFieldValueAccessor =
 			new RadioDDMFormFieldValueAccessor();
