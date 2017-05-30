@@ -17,7 +17,6 @@ package com.liferay.dynamic.data.mapping.type.radio.internal;
 import com.liferay.dynamic.data.mapping.model.UnlocalizedValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormValuesTestUtil;
-import com.liferay.portal.json.JSONFactoryImpl;
 import com.liferay.portal.kernel.util.LocaleUtil;
 
 import org.junit.Assert;
@@ -36,8 +35,6 @@ public class RadioDDMFormFieldValueAccessorTest {
 
 		RadioDDMFormFieldValueAccessor radioDDMFormFieldValueAccessor =
 			new RadioDDMFormFieldValueAccessor();
-
-		radioDDMFormFieldValueAccessor.jsonFactory = new JSONFactoryImpl();
 
 		Assert.assertEquals(
 			"value 1",
