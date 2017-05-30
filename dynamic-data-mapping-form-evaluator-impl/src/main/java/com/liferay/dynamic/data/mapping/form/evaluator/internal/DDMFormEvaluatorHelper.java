@@ -41,6 +41,7 @@ import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.storage.FieldConstants;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
@@ -135,6 +136,26 @@ public class DDMFormEvaluatorHelper {
 		return ddmFormEvaluationResult;
 	}
 
+	protected Object convertToTargetDataType(
+		DDMFormField ddmFormField, Object value) {
+
+		if (value instanceof JSONArray) {
+			return value;
+		}
+
+		String dataType = ddmFormField.getDataType();
+
+		if (FieldConstants.isNumericType(dataType) ||
+			dataType.equals(FieldConstants.BOOLEAN) ||
+			dataType.equals(FieldConstants.DATE)) {
+
+			return FieldConstants.getSerializable(
+				ddmFormField.getDataType(), String.valueOf(value));
+		}
+
+		return value;
+	}
+
 	protected DDMFormFieldEvaluationResult createDDMFormFieldEvaluationResult(
 		DDMFormField ddmFormField, DDMFormFieldValue ddmFormFieldValue) {
 
@@ -155,8 +176,10 @@ public class DDMFormEvaluatorHelper {
 		setDDMFormFieldEvaluationResultValidation(
 			ddmFormFieldEvaluationResult, ddmFormField, ddmFormFieldValue);
 
+		Object value = getValue(ddmFormField, ddmFormFieldValue);
+
 		ddmFormFieldEvaluationResult.setValue(
-			getValue(ddmFormField, ddmFormFieldValue));
+			convertToTargetDataType(ddmFormField, value));
 
 		return ddmFormFieldEvaluationResult;
 	}
