@@ -25,7 +25,7 @@ import com.liferay.dynamic.data.mapping.form.evaluator.DDMFormFieldEvaluationRes
 import com.liferay.dynamic.data.mapping.form.evaluator.internal.functions.AllFunction;
 import com.liferay.dynamic.data.mapping.form.evaluator.internal.functions.BelongsToRoleFunction;
 import com.liferay.dynamic.data.mapping.form.evaluator.internal.functions.CallFunction;
-import com.liferay.dynamic.data.mapping.form.evaluator.internal.functions.GetPropertyFunction;
+import com.liferay.dynamic.data.mapping.form.evaluator.internal.functions.GetValueFunction;
 import com.liferay.dynamic.data.mapping.form.evaluator.internal.functions.JumpPageFunction;
 import com.liferay.dynamic.data.mapping.form.evaluator.internal.functions.SetEnabledFunction;
 import com.liferay.dynamic.data.mapping.form.evaluator.internal.functions.SetInvalidFunction;
@@ -429,8 +429,10 @@ public class DDMFormEvaluatorHelper {
 				_request, _jsonFactory));
 		_ddmExpressionFunctionRegistry.registerDDMExpressionFunction(
 			"getValue",
-			new GetPropertyFunction(
-				_ddmFormFieldEvaluationResultsMap, "value"));
+			new GetValueFunction(
+				_ddmForm.getDDMFormFieldsMap(true),
+				_ddmFormFieldEvaluationResultsMap,
+				_ddmFormFieldTypeServicesTracker));
 		_ddmExpressionFunctionRegistry.registerDDMExpressionFunction(
 			"jumpPage", new JumpPageFunction(_pageFlow));
 		_ddmExpressionFunctionRegistry.registerDDMExpressionFunction(
