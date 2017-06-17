@@ -65,19 +65,6 @@ public class CheckboxMultipleDDMFormFieldValueAccessor
 		return true;
 	}
 
-	protected JSONArray createJSONArray(String json) {
-		try {
-			return jsonFactory.createJSONArray(json);
-		}
-		catch (JSONException jsone) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Unable to parse JSON array", jsone);
-			}
-
-			return jsonFactory.createJSONArray();
-		}
-	}
-
 	@Override
 	public Object map(Object value) {
 		if (Validator.isNull(value)) {
@@ -105,6 +92,19 @@ public class CheckboxMultipleDDMFormFieldValueAccessor
 			}
 
 			return StringPool.BLANK;
+		}
+	}
+
+	protected JSONArray createJSONArray(String json) {
+		try {
+			return jsonFactory.createJSONArray(json);
+		}
+		catch (JSONException jsone) {
+			if (_log.isDebugEnabled()) {
+				_log.debug("Unable to parse JSON array", jsone);
+			}
+
+			return jsonFactory.createJSONArray();
 		}
 	}
 

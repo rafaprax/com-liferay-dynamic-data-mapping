@@ -37,7 +37,6 @@ import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
-import com.liferay.dynamic.data.mapping.model.Value;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.storage.FieldConstants;
@@ -371,8 +370,8 @@ public class DDMFormEvaluatorHelper {
 			return null;
 		}
 
-		DDMFormFieldValueAccessor<Object> ddmFormFieldValueAccessor =
-			getDDMFormFieldValueAccessor(ddmFormField);
+		DDMFormFieldValueAccessor<?> ddmFormFieldValueAccessor =
+			getDDMFormFieldValueAccessor(ddmFormField.getType());
 
 		return ddmFormFieldValueAccessor.getValue(ddmFormFieldValue, _locale);
 	}
