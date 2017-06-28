@@ -96,6 +96,7 @@ public class SelectDDMFormFieldTemplateContextContributor
 			LanguageUtil.get(resourceBundle, "dynamically-loaded-data"));
 		stringsMap.put(
 			"emptyList", LanguageUtil.get(resourceBundle, "empty-list"));
+		stringsMap.put("search", LanguageUtil.get(resourceBundle, "search"));
 
 		parameters.put("strings", stringsMap);
 
