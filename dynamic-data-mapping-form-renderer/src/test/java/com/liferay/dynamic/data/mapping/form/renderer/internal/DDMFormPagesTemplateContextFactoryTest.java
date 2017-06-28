@@ -14,9 +14,6 @@
 
 package com.liferay.dynamic.data.mapping.form.renderer.internal;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.liferay.dynamic.data.mapping.expression.internal.DDMExpressionFactoryImpl;
 import com.liferay.dynamic.data.mapping.form.evaluator.DDMFormEvaluator;
 import com.liferay.dynamic.data.mapping.form.evaluator.internal.DDMFormEvaluatorImpl;
@@ -34,7 +31,6 @@ import com.liferay.dynamic.data.mapping.test.util.DDMFormTestUtil;
 import com.liferay.dynamic.data.mapping.test.util.DDMFormValuesTestUtil;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.ResourceBundleLoader;
@@ -495,12 +491,15 @@ public class DDMFormPagesTemplateContextFactoryTest extends PowerMockito {
 		return ddmFormPagesTemplateContextFactory;
 	}
 
-	protected DDMFormEvaluator getDDMFormEvaluator() {
+	protected DDMFormEvaluator getDDMFormEvaluator() throws Exception {
 		DDMFormEvaluator ddmFormEvaluator = new DDMFormEvaluatorImpl();
 
-		ReflectionTestUtil.setFieldValue(
-			ddmFormEvaluator, "_ddmExpressionFactory",
-			new DDMExpressionFactoryImpl());
+		field(
+			DDMFormEvaluatorImpl.class, "_ddmExpressionFactory"
+		).set(
+			ddmFormEvaluator, new DDMExpressionFactoryImpl()
+		);
+
 		field(
 			DDMFormEvaluatorImpl.class, "_ddmFormFieldTypeServicesTracker"
 		).set(
