@@ -2937,12 +2937,16 @@ AUI.add(
 
 						var fieldName = field.get('name');
 
+						var fieldContainer = field.get('container');
+
+						var parentNode = fieldContainer.get('parentNode');
+
 						var repeatableInstance = instance.repeatableInstances[fieldName];
 
 						if (!repeatableInstance) {
 							repeatableInstance = new A.SortableList(
 								{
-									dropOn: field.get('container').get('parentNode'),
+									dropOn: parentNode,
 									helper: A.Node.create(TPL_REPEATABLE_HELPER),
 									nodes: '[data-fieldName=' + fieldName + ']',
 									placeholder: A.Node.create(TPL_REPEATABLE_PLACEHOLDER),
@@ -2959,13 +2963,28 @@ AUI.add(
 							instance.repeatableInstances[fieldName] = repeatableInstance;
 						}
 						else {
-							repeatableInstance.add(field.get('container'));
+							repeatableInstance.add(fieldContainer);
 						}
 
-						var drag = A.DD.DDM.getDrag(field.get('container'));
+						var drag = A.DD.DDM.getDrag(fieldContainer);
 
 						drag.addInvalid('.alloy-editor');
 						drag.addInvalid('.lfr-source-editor');
+
+						drag.plug(
+							A.Plugin.DDConstrained,
+							{
+								constrain: parentNode
+							}
+						);
+
+						drag.plug(
+							A.Plugin.DDNodeScroll,
+							{
+								horizontal: false,
+								node: parentNode
+							}
+						);
 					},
 
 					toJSON: function() {
