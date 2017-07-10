@@ -2935,12 +2935,33 @@ AUI.add(
 
 						var fieldName = field.get('name');
 
+						var fieldContainer = field.get('container');
+
+						var parentNode = fieldContainer.get('parentNode');
+
 						var repeatableInstance = instance.repeatableInstances[fieldName];
 
 						if (!repeatableInstance) {
 							repeatableInstance = new A.SortableList(
 								{
-									dropOn: field.get('container').get('parentNode'),
+									dd: {
+										plugins: [
+											{
+												cfg: {
+													constrain: '#main-content'
+												},
+												fn: A.Plugin.DDConstrained
+											},
+											{
+												cfg: {
+													horizontal: false,
+													node: '.lfr-form-content'
+												},
+												fn: A.Plugin.DDNodeScroll
+											}
+										]
+									},
+									dropOn: '#' + parentNode.attr("id"),
 									helper: A.Node.create(TPL_REPEATABLE_HELPER),
 									nodes: '[data-fieldName=' + fieldName + ']',
 									sortCondition: function(event) {
@@ -2956,10 +2977,10 @@ AUI.add(
 							instance.repeatableInstances[fieldName] = repeatableInstance;
 						}
 						else {
-							repeatableInstance.add(field.get('container'));
+							repeatableInstance.add(fieldContainer);
 						}
 
-						var drag = A.DD.DDM.getDrag(field.get('container'));
+						var drag = A.DD.DDM.getDrag(fieldContainer);
 
 						drag.addInvalid('.alloy-editor');
 						drag.addInvalid('.lfr-source-editor');
