@@ -43,8 +43,6 @@ AUI.add(
 
 		var TPL_REPEATABLE_HELPER = '<div class="lfr-ddm-repeatable-helper"></div>';
 
-		var TPL_REPEATABLE_PLACEHOLDER = '<div class="lfr-ddm-repeatable-placeholder"></div>';
-
 		var TPL_REQUIRED_MARK = '<span class="icon-asterisk text-warning"><span class="hide-accessible">' + Liferay.Language.get('required') + '</span></span>';
 
 		var FieldTypes = Liferay.namespace('DDM.FieldTypes');
@@ -2946,10 +2944,26 @@ AUI.add(
 						if (!repeatableInstance) {
 							repeatableInstance = new A.SortableList(
 								{
+									dd: {
+										plugins: [
+											{
+												cfg: {
+													constrain: '.lfr-form-content'
+												},
+												fn: A.Plugin.DDConstrained
+											},
+											{
+												cfg: {
+													horizontal: false,
+													node: '.lfr-form-content'
+												},
+												fn: A.Plugin.DDNodeScroll
+											}
+										]
+									},
 									dropOn: parentNode,
 									helper: A.Node.create(TPL_REPEATABLE_HELPER),
 									nodes: '[data-fieldName=' + fieldName + ']',
-									placeholder: A.Node.create(TPL_REPEATABLE_PLACEHOLDER),
 									sortCondition: function(event) {
 										var dropNode = event.drop.get('node');
 
@@ -2970,21 +2984,6 @@ AUI.add(
 
 						drag.addInvalid('.alloy-editor');
 						drag.addInvalid('.lfr-source-editor');
-
-						drag.plug(
-							A.Plugin.DDConstrained,
-							{
-								constrain: parentNode
-							}
-						);
-
-						drag.plug(
-							A.Plugin.DDNodeScroll,
-							{
-								horizontal: false,
-								node: parentNode
-							}
-						);
 					},
 
 					toJSON: function() {
