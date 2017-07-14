@@ -15,12 +15,15 @@
 package com.liferay.dynamic.data.mapping.type.radio.internal;
 
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldValueRequestParameterRetriever;
+import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Marcellus Tavares
@@ -34,8 +37,29 @@ public class RadioDDMFormFieldValueRequestParameterRetriever
 		HttpServletRequest httpServletRequest, String ddmFormFieldParameterName,
 		String defaultDDMFormFieldParameterValue) {
 
-		return ParamUtil.getString(
-			httpServletRequest, ddmFormFieldParameterName, StringPool.BLANK);
+		String[] defaultDDMFormFieldParameterValues =
+			getDefaultDDMFormFieldParameterValues(
+				defaultDDMFormFieldParameterValue);
+
+		String[] parameterValues = ParamUtil.getParameterValues(
+			httpServletRequest, ddmFormFieldParameterName,
+			defaultDDMFormFieldParameterValues);
+
+		return jsonFactory.serialize(parameterValues);
 	}
+
+	protected String[] getDefaultDDMFormFieldParameterValues(
+		String defaultDDMFormFieldParameterValue) {
+
+		if (Validator.isNull(defaultDDMFormFieldParameterValue)) {
+			return GetterUtil.DEFAULT_STRING_VALUES;
+		}
+
+		return jsonFactory.looseDeserialize(
+			defaultDDMFormFieldParameterValue, String[].class);
+	}
+
+	@Reference
+	protected JSONFactory jsonFactory;
 
 }

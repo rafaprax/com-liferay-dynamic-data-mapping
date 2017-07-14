@@ -19,8 +19,11 @@ import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderingContext;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.ReflectionUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -114,16 +117,23 @@ public class RadioDDMFormFieldTemplateContextContributor
 		DDMFormField ddmFormField,
 		DDMFormFieldRenderingContext ddmFormFieldRenderingContext) {
 
-		Object predefinedValue = ddmFormField.getProperty("predefinedValue");
+		LocalizedValue predefinedValue = ddmFormField.getPredefinedValue();
 
-		if (Validator.isNotNull(predefinedValue)) {
-			LocalizedValue localizedValue = (LocalizedValue)predefinedValue;
-
-			return localizedValue.getString(
-				ddmFormFieldRenderingContext.getLocale());
+		if (predefinedValue == null) {
+			return null;
 		}
 
-		return null;
+		String valueString = predefinedValue.getString(
+			ddmFormFieldRenderingContext.getLocale());
+
+		try {
+			JSONArray jsonArray = jsonFactory.createJSONArray(valueString);
+
+			return jsonArray.getString(0);
+		}
+		catch (JSONException jsone) {
+			return ReflectionUtil.throwException(jsone);
+		}
 	}
 
 	protected String getValue(
