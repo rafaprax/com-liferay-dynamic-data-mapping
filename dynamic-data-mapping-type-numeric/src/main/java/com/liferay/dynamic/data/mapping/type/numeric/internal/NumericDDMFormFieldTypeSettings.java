@@ -77,7 +77,7 @@ public interface NumericDDMFormFieldTypeSettings
 
 	@DDMFormField(
 		label = "%my-numeric-type-is", optionLabels = {"%integer", "%decimal"},
-		optionValues = {"integer", "double"}, predefinedValue = "integer",
+		optionValues = {"integer", "double"}, predefinedValue = "[\"integer\"]",
 		type = "radio"
 	)
 	@Override
