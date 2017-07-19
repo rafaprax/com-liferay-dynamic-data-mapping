@@ -45,10 +45,6 @@ public class DocumentLibraryDDMFormFieldValueAccessorTest extends PowerMockito {
 
 	@Test
 	public void testEmpty() {
-		DDMFormField ddmFormField = DDMFormTestUtil.createDDMFormField(
-			"documentLibrary", "Document Library", "document_library", "string",
-			false, false, true);
-
 		DDMFormFieldValue ddmFormFieldValue =
 			DDMFormValuesTestUtil.createDDMFormFieldValue(
 				"documentLibrary", new UnlocalizedValue(""));
@@ -60,10 +56,6 @@ public class DocumentLibraryDDMFormFieldValueAccessorTest extends PowerMockito {
 
 	@Test
 	public void testNotEmpty() {
-		DDMFormField ddmFormField = DDMFormTestUtil.createDDMFormField(
-			"documentLibrary", "Document Library", "document_library", "string",
-			false, false, true);
-
 		StringBundler sb = new StringBundler();
 
 		sb.append("\"{\"groupId\":\"32964\",");
