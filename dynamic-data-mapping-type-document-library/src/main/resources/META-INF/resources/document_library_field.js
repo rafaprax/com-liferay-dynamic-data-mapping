@@ -6,10 +6,6 @@ AUI.add(
 		var DocumentLibraryField = A.Component.create({
 
 			ATTRS: {
-				acceptedFileFormats: {
-					value: ['*']
-				},
-
 				clearButtonVisible: {
 					value: false
 				},
@@ -18,17 +14,8 @@ AUI.add(
 					value: ''
 				},
 
-				fileEntryURL: {
-					value: ''
-				},
-
 				groupId: {
 					value: 0
-				},
-
-				lexiconIconsPath: {
-					getter: '_getLexiconIconsPath',
-					value: ''
 				},
 
 				strings: {
@@ -91,29 +78,16 @@ AUI.add(
 					return portletURL.toString();
 				},
 
-				getInputNode: function() {
+				getStringValue: function() {
 					var instance = this;
 
-					var container = instance.get('container');
-
-					var inputNode = container.one('input[type="hidden"]');
-
-					return inputNode;
-				},
-
-				getParsedValue: function(value) {
-					var instance = this;
+					var value = instance.get('value');
 
 					if (Lang.isString(value)) {
-						if (value !== '') {
-							value = JSON.parse(value);
-						}
-						else {
-							value = {};
-						}
+						return value;
 					}
 
-					return value;
+					return JSON.stringify(value);
 				},
 
 				getTemplateContext: function() {
@@ -124,8 +98,8 @@ AUI.add(
 						{
 							clearButtonVisible: instance.get('clearButtonVisible'),
 							fileEntryTitle: instance.get('fileEntryTitle'),
-							lexiconIconsPath: instance.get('lexiconIconsPath'),
-							strings: instance.get('strings')
+							strings: instance.get('strings'),
+							value: instance.getStringValue()
 						}
 					);
 				},
@@ -153,17 +127,13 @@ AUI.add(
 				setValue: function(value) {
 					var instance = this;
 
-					var parsedValue = instance.getParsedValue(value);
-
-					if (!parsedValue.title && !parsedValue.uuid) {
-						value = '';
-						instance.set('fileEntryTitle', '');
-						instance.set('clearButtonVisible', false);
+					if (value.title && value.uuid) {
+						instance.set('fileEntryTitle', value.title);
+						instance.set('clearButtonVisible', true);
 					}
 					else {
-						value = JSON.stringify(parsedValue);
-						instance.set('fileEntryTitle', parsedValue.title);
-						instance.set('clearButtonVisible', true);
+						instance.set('fileEntryTitle', '');
+						instance.set('clearButtonVisible', false);
 					}
 
 					instance.set('value', value);
@@ -179,12 +149,6 @@ AUI.add(
 					DocumentLibraryField.superclass.showErrorMessage.apply(instance, arguments);
 
 					container.all('.help-block').appendTo(container.one('.form-group'));
-				},
-
-				_getLexiconIconsPath: function() {
-					var instance = this;
-
-					return themeDisplay.getPathThemeImages() + '/lexicon/icons.svg#';
 				},
 
 				_handleButtonsClick: function(event) {
@@ -205,7 +169,7 @@ AUI.add(
 				_handleClearButtonClick: function(event) {
 					var instance = this;
 
-					instance.setValue('');
+					instance.setValue({});
 				},
 
 				_handleSelectButtonClick: function(event) {
@@ -221,16 +185,7 @@ AUI.add(
 									var selectedItem = event.newVal;
 
 									if (selectedItem) {
-										var itemValue = JSON.parse(selectedItem.value);
-
-										instance.setValue(
-											{
-												groupId: itemValue.groupId,
-												title: itemValue.title,
-												type: itemValue.type,
-												uuid: itemValue.uuid
-											}
-										);
+										instance.setValue(JSON.parse(selectedItem.value));
 									}
 								}
 							},

@@ -32,15 +32,18 @@ import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.URLCodec;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Pedro Queiroz
@@ -55,14 +58,11 @@ import java.util.ResourceBundle;
 public class DocumentLibraryDDMFormFieldTemplateContextContributor
 	implements DDMFormFieldTemplateContextContributor {
 
-	public FileEntry getFileEntry(JSONObject value) {
-		String fileEntryUUID = value.getString("uuid");
-
-		long fileEntryGroupId = value.getLong("groupId");
-
+	public FileEntry getFileEntry(JSONObject valueJSONObject) {
 		try {
 			return dlAppService.getFileEntryByUuidAndGroupId(
-				fileEntryUUID, fileEntryGroupId);
+				valueJSONObject.getString("uuid"),
+				valueJSONObject.getLong("groupId"));
 		}
 		catch (PortalException pe) {
 			_log.error("Unable to retrieve file entry ", pe);
@@ -72,14 +72,18 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 	}
 
 	public String getFileEntryURL(
-		HttpServletRequest request, JSONObject value) {
+		HttpServletRequest request, JSONObject valueJSONObject) {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		FileEntry fileEntry = getFileEntry(value);
+		FileEntry fileEntry = getFileEntry(valueJSONObject);
 
-		StringBundler sb = new StringBundler();
+		if (fileEntry == null) {
+			return StringPool.BLANK;
+		}
+
+		StringBundler sb = new StringBundler(9);
 
 		sb.append(themeDisplay.getPathContext());
 		sb.append("/documents/");
@@ -122,6 +126,23 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 		HttpServletRequest request =
 			ddmFormFieldRenderingContext.getHttpServletRequest();
 
+		if (ddmFormFieldRenderingContext.isReadOnly() &&
+			Validator.isNotNull(ddmFormFieldRenderingContext.getValue())) {
+
+			JSONObject valueJSONObject = getValueJSONObject(
+				ddmFormFieldRenderingContext.getValue());
+
+			if (valueJSONObject.length() > 0) {
+				parameters.put("fileEntryTitle", valueJSONObject.get("title"));
+				parameters.put(
+					"fileEntryURL", getFileEntryURL(request, valueJSONObject));
+			}
+		}
+
+		parameters.put(
+			"groupId", ddmFormFieldRenderingContext.getProperty("groupId"));
+		parameters.put("lexiconIconsPath", getLexiconIconsPath(request));
+
 		Map<String, String> stringsMap = new HashMap<>();
 
 		ResourceBundle resourceBundle = getResourceBundle(
@@ -130,18 +151,6 @@ public class DocumentLibraryDDMFormFieldTemplateContextContributor
 		stringsMap.put("select", LanguageUtil.get(resourceBundle, "select"));
 
 		parameters.put("strings", stringsMap);
-
-		parameters.put(
-			"groupId", ddmFormFieldRenderingContext.getProperty("groupId"));
-		parameters.put("lexiconIconsPath", getLexiconIconsPath(request));
-
-		JSONObject value = getValueJSONObject(
-			ddmFormFieldRenderingContext.getValue());
-
-		if (ddmFormFieldRenderingContext.isReadOnly() && (value.length() > 0)) {
-			parameters.put("fileEntryTitle", value.get("title"));
-			parameters.put("fileEntryURL", getFileEntryURL(request, value));
-		}
 
 		return parameters;
 	}
