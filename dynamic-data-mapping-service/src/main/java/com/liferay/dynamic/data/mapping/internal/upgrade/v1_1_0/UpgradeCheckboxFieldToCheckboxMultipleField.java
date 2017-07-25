@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.dynamic.data.mapping.internal.upgrade.v1_0_2;
+package com.liferay.dynamic.data.mapping.internal.upgrade.v1_1_0;
 
 import com.liferay.dynamic.data.mapping.io.DDMFormJSONDeserializer;
 import com.liferay.dynamic.data.mapping.io.DDMFormValuesJSONDeserializer;

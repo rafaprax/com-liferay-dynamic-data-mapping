@@ -94,18 +94,18 @@ public class DDMServiceUpgrade implements UpgradeStepRegistrator {
 			new UpgradeCheckboxFieldToCheckboxMultipleField(
 				_ddmFormJSONDeserializer, _ddmFormValuesJSONDeserializer,
 				_ddmFormValuesJSONSerializer, _jsonFactory),
-			new com.liferay.dynamic.data.mapping.internal.upgrade.v1_0_2.
+			new com.liferay.dynamic.data.mapping.internal.upgrade.v1_1_0.
 				UpgradeDDMStructure(
 					_ddmExpressionFactory, _ddmFormJSONDeserializer,
 					_ddmFormJSONSerializer),
-			new com.liferay.dynamic.data.mapping.internal.upgrade.v1_0_2.
+			new com.liferay.dynamic.data.mapping.internal.upgrade.v1_1_0.
 				UpgradeDataProviderInstance(_jsonFactory));
 
 		registry.register(
 			"com.liferay.dynamic.data.mapping.service", "1.1.0", "1.1.1",
 			new UpgradeDDMFormFieldSettings(
 				_ddmFormJSONDeserializer, _ddmFormJSONSerializer),
-			new com.liferay.dynamic.data.mapping.internal.upgrade.v1_0_3.
+			new com.liferay.dynamic.data.mapping.internal.upgrade.v1_1_1.
 				UpgradeDataProviderInstance(
 					_ddmFormValuesJSONDeserializer,
 					_ddmFormValuesJSONSerializer));
