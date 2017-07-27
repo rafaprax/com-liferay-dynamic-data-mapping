@@ -47,7 +47,7 @@ public class DDMFormFieldType {
 
 	public static final String NUMERIC = "numeric";
 
-	public static final String PASSWORD = "password";	
+	public static final String PASSWORD = "password";
 
 	public static final String RADIO = "radio";
 
