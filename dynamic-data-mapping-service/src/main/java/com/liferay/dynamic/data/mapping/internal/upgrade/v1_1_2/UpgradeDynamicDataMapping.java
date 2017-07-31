@@ -28,7 +28,10 @@ import com.liferay.dynamic.data.mapping.util.DDMFormFieldValueTransformer;
 import com.liferay.dynamic.data.mapping.util.DDMFormValuesTransformer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeException;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -48,9 +51,9 @@ import java.util.Map.Entry;
 /**
  * @author Rafael Praxedes
  */
-public class UpgradeDDMFormFieldValues extends UpgradeProcess {
+public class UpgradeDynamicDataMapping extends UpgradeProcess {
 
-	public UpgradeDDMFormFieldValues(
+	public UpgradeDynamicDataMapping(
 		DDMFormJSONDeserializer ddmFormJSONDeserializer,
 		DDMFormJSONSerializer ddmFormJSONSerializer,
 		DDMFormValuesJSONDeserializer ddmFormValuesJSONDeserializer,
@@ -64,6 +67,24 @@ public class UpgradeDDMFormFieldValues extends UpgradeProcess {
 		_jsonFactory = jsonFactory;
 	}
 
+	protected String convertJSONArrayToString(String value) {
+		try {
+			JSONArray jsonArray = _jsonFactory.createJSONArray(value);
+
+			if (jsonArray.length() == 0) {
+				return StringPool.BLANK;
+			}
+
+			return jsonArray.getString(0);
+		}
+		catch (JSONException jsone) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(jsone, jsone);
+			}
+
+			return value;
+		}
+	}
 
 	@Override
 	protected void doUpgrade() throws Exception {
@@ -238,7 +259,6 @@ public class UpgradeDDMFormFieldValues extends UpgradeProcess {
 	}
 
 	protected void upgradeDDMStructureReferences() throws Exception {
-
 		try (PreparedStatement ps1 = connection.prepareStatement(
 				"select DDMStructure.structureId from DDMStructure");
 			PreparedStatement ps2 =
@@ -283,6 +303,9 @@ public class UpgradeDDMFormFieldValues extends UpgradeProcess {
 		upgradeDDMContentReferences(sb.toString());
 	}
 
+	private static final Log _log = LogFactoryUtil.getLog(
+		UpgradeDynamicDataMapping.class);
+
 	private final DDMFormJSONDeserializer _ddmFormJSONDeserializer;
 	private final DDMFormJSONSerializer _ddmFormJSONSerializer;
 	private final Map<Long, DDMForm> _ddmForms = new HashMap<>();
@@ -316,18 +339,6 @@ public class UpgradeDDMFormFieldValues extends UpgradeProcess {
 			}
 		}
 
-	}
-	
-	protected String convertJSONArrayToString(String value)
-			throws PortalException {
-
-		JSONArray jsonArray = _jsonFactory.createJSONArray(value);
-
-		if (jsonArray.length() == 0) {
-			return StringPool.BLANK;
-		}
-
-		return jsonArray.getString(0);
 	}
 
 	private class SelectDDMFormFieldValueTransformer
