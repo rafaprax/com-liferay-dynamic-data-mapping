@@ -215,7 +215,7 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	protected void upgradeDDLDDMContentReferences() throws Exception {
 		StringBundler sb = new StringBundler(7);
 
-		sb.append("select DDLRecordVersion.*, DDMContent.data_, ");
+		sb.append("select DDMContent.contentId, DDMContent.data_, ");
 		sb.append("DDMStructure.structureId from DDLRecordVersion inner ");
 		sb.append("join DDLRecordSet on DDLRecordVersion.recordSetId = ");
 		sb.append("DDLRecordSet.recordSetId inner join DDMContent on  ");
@@ -289,11 +289,10 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 	protected void upgradeDLDDMContentReferences() throws Exception {
 		StringBundler sb = new StringBundler(10);
 
-		sb.append("select DLFileVersion.*, DDMContent.contentId, ");
-		sb.append("DDMContent.data_, DDMStructure.structureId from ");
-		sb.append("DLFileEntryMetadata inner join DDMContent on ");
-		sb.append("DLFileEntryMetadata.DDMStorageId = DDMContent.contentId ");
-		sb.append("inner join DDMStructure on ");
+		sb.append("select DDMContent.contentId, DDMContent.data_,");
+		sb.append("DDMStructure.structureId from DLFileEntryMetadata inner ");
+		sb.append("join DDMContent on DLFileEntryMetadata.DDMStorageId = ");
+		sb.append("DDMContent.contentId inner join DDMStructure on ");
 		sb.append("DLFileEntryMetadata.DDMStructureId = DDMStructure.");
 		sb.append("structureId inner join DLFileVersion on ");
 		sb.append("DLFileEntryMetadata.fileVersionId = DLFileVersion.");
