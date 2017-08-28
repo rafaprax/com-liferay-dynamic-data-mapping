@@ -235,7 +235,7 @@ public class UpgradeDynamicDataMapping extends UpgradeProcess {
 			ResultSet rs = ps1.executeQuery()) {
 
 			while (rs.next()) {
-				long contentId = rs.getLong("ddmStorageId");
+				long contentId = rs.getLong("contentId");
 				String data = rs.getString("data_");
 				long ddmStructureId = rs.getLong("structureId");
 
