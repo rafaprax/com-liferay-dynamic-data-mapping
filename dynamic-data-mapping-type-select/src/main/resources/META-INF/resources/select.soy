@@ -13,7 +13,7 @@
 {template .render}
 	{@param? badgeCloseIcon: html}
 	{@param? dir: string}
-	{@param? label: string}
+	{@param? label: ?}
 	{@param? multiple: ?}
 	{@param name: string}
 	{@param? open: bool}
@@ -101,7 +101,7 @@
  */
 {template .badge_item}
 	{@param? badgeCloseIcon: html}
-	{@param? label: string}
+	{@param? label: ?}
 	{@param value: string}
 
 	<li>
@@ -116,7 +116,7 @@
  * Prints the select label.
  */
 {template .select_label}
-	{@param? label: string}
+	{@param? label: ?}
 	{@param name: string}
 	{@param? required: bool}
 	{@param? tip: string}

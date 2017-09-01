@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
+import com.netflix.hystrix.HystrixCommandProperties;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import com.netflix.hystrix.exception.HystrixRuntimeException.FailureType;
 
@@ -156,11 +157,11 @@ public class DDMDataProviderInvokerImpl implements DDMDataProviderInvoker {
 		DDMDataProvider ddmDataProvider = getDDMDataProvider(
 			ddmDataProviderInstanceId, ddmDataProviderInstanceOptional);
 
-		if (ddmDataProviderInstanceOptional.isPresent()) {
-			return doInvokeExternal(
-				ddmDataProviderInstanceOptional.get(), ddmDataProvider,
-				ddmDataProviderRequest);
-		}
+//		if (ddmDataProviderInstanceOptional.isPresent()) {
+//			return doInvokeExternal(
+//				ddmDataProviderInstanceOptional.get(), ddmDataProvider,
+//				ddmDataProviderRequest);
+//		}
 
 		return ddmDataProvider.getData(ddmDataProviderRequest);
 	}
@@ -268,14 +269,24 @@ public class DDMDataProviderInvokerImpl implements DDMDataProviderInvoker {
 			String ddmDataProviderInstanceName, DDMDataProvider ddmDataProvider,
 			DDMDataProviderRequest ddmDataProviderRequest) {
 
-			super(
-				Setter.withGroupKey(_hystrixCommandGroupKey).andCommandKey(
-					HystrixCommandKey.Factory.asKey(
-						"DDMDataProviderInvokeCommand#" +
-							ddmDataProviderInstanceName)));
+			super(createSetter(ddmDataProviderInstanceName));
 
 			_ddmDataProvider = ddmDataProvider;
 			_ddmDataProviderRequest = ddmDataProviderRequest;
+		}
+		
+		private static Setter createSetter(String ddmDataProviderInstanceName) {
+			
+			Setter setter = Setter.withGroupKey(_hystrixCommandGroupKey).andCommandKey(
+					HystrixCommandKey.Factory.asKey(
+							"DDMDataProviderInvokeCommand#" +
+								ddmDataProviderInstanceName));
+			
+			setter.andCommandPropertiesDefaults(
+				HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(10000));
+			
+			return setter;
+			
 		}
 
 		@Override

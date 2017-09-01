@@ -168,7 +168,7 @@ public class DDMFormJSONDeserializerImpl implements DDMFormJSONDeserializer {
 			return localizedValue;
 		}
 
-		JSONObject jsonObject = _jsonFactory.createJSONObject(value);
+		JSONObject jsonObject = _jsonFactory.createJSONObject();
 
 		Iterator<String> itr = jsonObject.keys();
 

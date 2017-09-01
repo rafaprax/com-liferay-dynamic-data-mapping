@@ -96,6 +96,20 @@ AUI.add(
 						return container.ancestor('form', true);
 					},
 
+					getFormValues: function() {
+						var instance = this;
+
+						var fields = instance.getImmediateFields();
+
+						var formFieldValues = {};
+
+						fields.forEach(function(field){
+							formFieldValues[field.get('fieldName')] = field.getValue();
+						});
+
+						return formFieldValues;
+					},
+
 					getSubmitButton: function() {
 						var instance = this;
 
