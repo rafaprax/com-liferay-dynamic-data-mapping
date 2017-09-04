@@ -195,6 +195,14 @@ public class CallFunction extends BaseDDMFormRuleFunction {
 
 		Object value = ddmFormFieldEvaluationResult.getProperty("value");
 
+		if (value instanceof JSONArray) {
+			JSONArray jsonArray = (JSONArray)value;
+
+			if (jsonArray.length() > 0) {
+				value = jsonArray.getString(0);
+			}
+		}
+
 		if (Validator.isNull(value)) {
 			return StringPool.BLANK;
 		}
