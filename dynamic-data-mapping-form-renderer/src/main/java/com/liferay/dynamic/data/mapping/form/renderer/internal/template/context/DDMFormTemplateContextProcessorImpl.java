@@ -12,8 +12,10 @@
  * details.
  */
 
-package com.liferay.dynamic.data.mapping.form.renderer.internal.servlet;
+package com.liferay.dynamic.data.mapping.form.renderer.internal.template.context;
 
+import com.liferay.dynamic.data.mapping.form.renderer.DDMFormTemplateContextProcessor;
+import com.liferay.dynamic.data.mapping.form.renderer.DDMFormTemplateContextProcessorResult;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
@@ -39,43 +41,34 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.osgi.service.component.annotations.Component;
+
 /**
  * @author Marcellus Tavares
  */
-public class DDMFormTemplateContextProcessor {
+@Component(immediate = true)
+public class DDMFormTemplateContextProcessorImpl
+	implements DDMFormTemplateContextProcessor {
 
-	public DDMFormTemplateContextProcessor(JSONObject jsonObject) {
-		_jsonObject = jsonObject;
+	@Override
+	public DDMFormTemplateContextProcessorResult process(
+		JSONObject jsonObject) {
 
-		_ddmForm = new DDMForm();
-		_ddmFormLayout = new DDMFormLayout();
-		_ddmFormValues = new DDMFormValues(_ddmForm);
+		DDMFormTemplateContextProcessorResult
+			ddmFormTemplateContextProcessorResult =
+				createDDMFormTemplateContextProcessorResult(jsonObject);
 
-		_locale = Locale.US;
+		traversePages(
+			jsonObject.getJSONArray("pages"),
+			ddmFormTemplateContextProcessorResult);
 
-		initModels();
-
-		process();
+		return ddmFormTemplateContextProcessorResult;
 	}
 
-	public DDMForm getDDMForm() {
-		return _ddmForm;
-	}
+	protected void addDDMFormDDMFormField(
+		JSONObject jsonObject, DDMForm ddmForm) {
 
-	public DDMFormLayout getDDMFormLayout() {
-		return _ddmFormLayout;
-	}
-
-	public DDMFormValues getDDMFormValues() {
-		return _ddmFormValues;
-	}
-
-	public long getGroupId() {
-		return _groupId;
-	}
-
-	protected void addDDMFormDDMFormField(JSONObject jsonObject) {
-		Map<String, DDMFormField> ddmFormFields = _ddmForm.getDDMFormFieldsMap(
+		Map<String, DDMFormField> ddmFormFields = ddmForm.getDDMFormFieldsMap(
 			true);
 
 		String fieldName = jsonObject.getString("fieldName");
@@ -86,13 +79,60 @@ public class DDMFormTemplateContextProcessor {
 
 		DDMFormField ddmFormField = getDDMFormField(jsonObject);
 
-		_ddmForm.addDDMFormField(ddmFormField);
+		ddmForm.addDDMFormField(ddmFormField);
 	}
 
-	protected void addDDMFormValuesDDMFormFieldValue(JSONObject jsonObject) {
+	protected void addDDMFormValuesDDMFormFieldValue(
+		JSONObject jsonObject, DDMFormValues ddmFormValues) {
+
 		DDMFormFieldValue ddmFormFieldValue = getDDMFormFieldValue(jsonObject);
 
-		_ddmFormValues.addDDMFormFieldValue(ddmFormFieldValue);
+		ddmFormValues.addDDMFormFieldValue(ddmFormFieldValue);
+	}
+
+	protected DDMForm createDDMForm(JSONObject jsonObject) {
+		DDMForm ddmForm = new DDMForm();
+
+		ddmForm.setDDMFormRules(createDDMFormRules(jsonObject));
+
+		return ddmForm;
+	}
+
+	protected List<DDMFormRule> createDDMFormRules(JSONObject jsonObject) {
+		List<DDMFormRule> ddmFormRules = getDDMFormRules(
+			jsonObject.getJSONArray("rules"));
+
+		return ddmFormRules;
+	}
+
+	protected DDMFormTemplateContextProcessorResult
+		createDDMFormTemplateContextProcessorResult(JSONObject jsonObject) {
+
+		DDMFormTemplateContextProcessorResult
+			ddmFormTemplateContextProcessorResult =
+				new DDMFormTemplateContextProcessorResult();
+
+		DDMForm ddmForm = createDDMForm(jsonObject);
+
+		ddmFormTemplateContextProcessorResult.addProperty("ddmForm", ddmForm);
+
+		ddmFormTemplateContextProcessorResult.addProperty(
+			"ddmFormLayout", new DDMFormLayout());
+		ddmFormTemplateContextProcessorResult.addProperty(
+			"ddmFormValues", createDDMFormValues(ddmForm));
+		ddmFormTemplateContextProcessorResult.addProperty(
+			"groupId", jsonObject.getLong("groupId", 0));
+
+		return ddmFormTemplateContextProcessorResult;
+	}
+
+	protected DDMFormValues createDDMFormValues(DDMForm ddmForm) {
+		DDMFormValues ddmFormValues = new DDMFormValues(ddmForm);
+
+		ddmFormValues.addAvailableLocale(_locale);
+		ddmFormValues.setDefaultLocale(_locale);
+
+		return ddmFormValues;
 	}
 
 	protected DDMFormField getDDMFormField(JSONObject jsonObject) {
@@ -194,19 +234,6 @@ public class DDMFormTemplateContextProcessor {
 		localizedValue.addString(_locale, value);
 
 		return localizedValue;
-	}
-
-	protected void initModels() {
-		setDDMFormRules();
-
-		setDDMFormValuesDefaultLocale();
-		setDDMFormValuesAvailableLocales();
-
-		setGroupId();
-	}
-
-	protected void process() {
-		traversePages(_jsonObject.getJSONArray("pages"));
 	}
 
 	protected void setDDMFormFieldDataProviderSettings(
@@ -341,27 +368,10 @@ public class DDMFormTemplateContextProcessor {
 			GetterUtil.getString(visibilityExpression));
 	}
 
-	protected void setDDMFormRules() {
-		List<DDMFormRule> ddmFormRules = getDDMFormRules(
-			_jsonObject.getJSONArray("rules"));
-
-		_ddmForm.setDDMFormRules(ddmFormRules);
-	}
-
-	protected void setDDMFormValuesAvailableLocales() {
-		_ddmFormValues.addAvailableLocale(_locale);
-	}
-
-	protected void setDDMFormValuesDefaultLocale() {
-		_ddmFormValues.setDefaultLocale(_locale);
-	}
-
-	protected void setGroupId() {
-		_groupId = _jsonObject.getLong("groupId", 0);
-	}
-
 	protected void traverseColumns(
-		JSONArray jsonArray, DDMFormLayoutRow ddmFormLayoutRow) {
+		JSONArray jsonArray, DDMFormLayoutRow ddmFormLayoutRow,
+		DDMFormTemplateContextProcessorResult
+			ddmFormTemplateContextProcessorResult) {
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -370,22 +380,30 @@ public class DDMFormTemplateContextProcessor {
 				jsonObject.getInt("size"));
 
 			traverseFields(
-				jsonObject.getJSONArray("fields"), ddmFormLayoutColumn);
+				jsonObject.getJSONArray("fields"), ddmFormLayoutColumn,
+				ddmFormTemplateContextProcessorResult);
 
 			ddmFormLayoutRow.addDDMFormLayoutColumn(ddmFormLayoutColumn);
 		}
 	}
 
 	protected void traverseFields(
-		JSONArray jsonArray, DDMFormLayoutColumn ddmFormLayoutColumn) {
+		JSONArray jsonArray, DDMFormLayoutColumn ddmFormLayoutColumn,
+		DDMFormTemplateContextProcessorResult
+			ddmFormTemplateContextProcessorResult) {
 
 		Set<String> ddmFormFieldNames = new LinkedHashSet<>();
+
+		DDMForm ddmForm = ddmFormTemplateContextProcessorResult.getProperty(
+			"DDMForm");
+		DDMFormValues ddmFormValues =
+			ddmFormTemplateContextProcessorResult.getProperty("ddmFormValues");
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-			addDDMFormDDMFormField(jsonObject);
-			addDDMFormValuesDDMFormFieldValue(jsonObject);
+			addDDMFormDDMFormField(jsonObject, ddmForm);
+			addDDMFormValuesDDMFormFieldValue(jsonObject, ddmFormValues);
 
 			ddmFormFieldNames.add(jsonObject.getString("fieldName"));
 		}
@@ -394,20 +412,31 @@ public class DDMFormTemplateContextProcessor {
 			ListUtil.fromCollection(ddmFormFieldNames));
 	}
 
-	protected void traversePages(JSONArray jsonArray) {
+	protected void traversePages(
+		JSONArray jsonArray,
+		DDMFormTemplateContextProcessorResult
+			ddmFormTemplateContextProcessorResult) {
+
+		DDMFormLayout ddmFormLayout =
+			ddmFormTemplateContextProcessorResult.getProperty("ddmFormLayout");
+
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 
 			DDMFormLayoutPage ddmFormLayoutPage = new DDMFormLayoutPage();
 
-			traverseRows(jsonObject.getJSONArray("rows"), ddmFormLayoutPage);
+			traverseRows(
+				jsonObject.getJSONArray("rows"), ddmFormLayoutPage,
+				ddmFormTemplateContextProcessorResult);
 
-			_ddmFormLayout.addDDMFormLayoutPage(ddmFormLayoutPage);
+			ddmFormLayout.addDDMFormLayoutPage(ddmFormLayoutPage);
 		}
 	}
 
 	protected void traverseRows(
-		JSONArray jsonArray, DDMFormLayoutPage ddmFormLayoutPage) {
+		JSONArray jsonArray, DDMFormLayoutPage ddmFormLayoutPage,
+		DDMFormTemplateContextProcessorResult
+			ddmFormTemplateContextProcessorResult) {
 
 		for (int i = 0; i < jsonArray.length(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -415,17 +444,13 @@ public class DDMFormTemplateContextProcessor {
 			DDMFormLayoutRow ddmFormLayoutRow = new DDMFormLayoutRow();
 
 			traverseColumns(
-				jsonObject.getJSONArray("columns"), ddmFormLayoutRow);
+				jsonObject.getJSONArray("columns"), ddmFormLayoutRow,
+				ddmFormTemplateContextProcessorResult);
 
 			ddmFormLayoutPage.addDDMFormLayoutRow(ddmFormLayoutRow);
 		}
 	}
 
-	private final DDMForm _ddmForm;
-	private final DDMFormLayout _ddmFormLayout;
-	private final DDMFormValues _ddmFormValues;
-	private long _groupId;
-	private final JSONObject _jsonObject;
-	private final Locale _locale;
+	private final Locale _locale = Locale.US;
 
 }
