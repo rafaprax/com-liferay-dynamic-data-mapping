@@ -17,6 +17,8 @@ package com.liferay.dynamic.data.mapping.form.renderer.internal.servlet;
 import com.liferay.dynamic.data.mapping.form.evaluator.DDMFormEvaluator;
 import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldTypeServicesTracker;
 import com.liferay.dynamic.data.mapping.form.renderer.DDMFormRenderingContext;
+import com.liferay.dynamic.data.mapping.form.renderer.DDMFormTemplateContextProcessor;
+import com.liferay.dynamic.data.mapping.form.renderer.DDMFormTemplateContextProcessorResult;
 import com.liferay.dynamic.data.mapping.form.renderer.internal.DDMFormPagesTemplateContextFactory;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayout;
@@ -69,23 +71,27 @@ public class DDMFormContextProviderServlet extends HttpServlet {
 				createDDMFormRenderingContext(
 					request, response, Locale.US, portletNamespace);
 
-			DDMFormTemplateContextProcessor ddmFormTemplateContextProcessor =
-				createDDMFormTemplateContextProcessor(request);
+			DDMFormTemplateContextProcessorResult
+				ddmFormTemplateContextProcessorResult =
+					getDDMFormTemplateContextProcessorResult(request);
 
 			DDMFormValues ddmFormValues =
-				ddmFormTemplateContextProcessor.getDDMFormValues();
+				ddmFormTemplateContextProcessorResult.getProperty(
+					"ddmFormValues");
 
 			ddmFormRenderingContext.setDDMFormValues(ddmFormValues);
 
 			ddmFormRenderingContext.setGroupId(
-				ddmFormTemplateContextProcessor.getGroupId());
+				ddmFormTemplateContextProcessorResult.getProperty("groupId"));
 
 			_prepareThreadLocal(Locale.US);
 
-			DDMForm ddmForm = ddmFormTemplateContextProcessor.getDDMForm();
+			DDMForm ddmForm = ddmFormTemplateContextProcessorResult.getProperty(
+				"ddmForm");
 
 			DDMFormLayout ddmFormLayout =
-				ddmFormTemplateContextProcessor.getDDMFormLayout();
+				ddmFormTemplateContextProcessorResult.getProperty(
+					"ddmFormLayout");
 
 			DDMFormPagesTemplateContextFactory
 				ddmFormPagesTemplateContextFactory =
@@ -124,19 +130,6 @@ public class DDMFormContextProviderServlet extends HttpServlet {
 		return ddmFormRenderingContext;
 	}
 
-	protected DDMFormTemplateContextProcessor
-			createDDMFormTemplateContextProcessor(HttpServletRequest request)
-		throws Exception {
-
-		String serializedFormContext = ParamUtil.getString(
-			request, "serializedFormContext");
-
-		JSONObject jsonObject = _jsonFactory.createJSONObject(
-			serializedFormContext);
-
-		return new DDMFormTemplateContextProcessor(jsonObject);
-	}
-
 	@Override
 	protected void doPost(
 			HttpServletRequest request, HttpServletResponse response)
@@ -165,6 +158,19 @@ public class DDMFormContextProviderServlet extends HttpServlet {
 			jsonSerializer.serializeDeep(ddmFormPagesTemplateContext));
 	}
 
+	protected DDMFormTemplateContextProcessorResult
+			getDDMFormTemplateContextProcessorResult(HttpServletRequest request)
+		throws Exception {
+
+		String serializedFormContext = ParamUtil.getString(
+			request, "serializedFormContext");
+
+		JSONObject jsonObject = _jsonFactory.createJSONObject(
+			serializedFormContext);
+
+		return _ddmFormTemplateContextProcessor.process(jsonObject);
+	}
+
 	private void _prepareThreadLocal(Locale locale)
 		throws Exception, PortalException {
 
@@ -181,6 +187,9 @@ public class DDMFormContextProviderServlet extends HttpServlet {
 
 	@Reference
 	private DDMFormFieldTypeServicesTracker _ddmFormFieldTypeServicesTracker;
+
+	@Reference
+	private DDMFormTemplateContextProcessor _ddmFormTemplateContextProcessor;
 
 	@Reference
 	private JSONFactory _jsonFactory;
