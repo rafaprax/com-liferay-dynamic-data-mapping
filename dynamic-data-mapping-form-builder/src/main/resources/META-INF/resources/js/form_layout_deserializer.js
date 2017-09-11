@@ -2,7 +2,7 @@ AUI.add(
 	'liferay-ddm-form-builder-layout-deserializer',
 	function(A) {
 		var FormBuilderUtil = Liferay.DDM.FormBuilderUtil;
-		var Settings = Liferay.DDL.Settings;
+		var Settings = Liferay.DDM.Settings;
 
 		var LayoutDeserializer = A.Component.create(
 			{
@@ -49,7 +49,7 @@ AUI.add(
 						);
 
 						if (column.fields && column.fields.length > 0) {
-							var fieldsList = new Liferay.DDL.FormBuilderFieldList(
+							var fieldsList = new Liferay.DDM.FormBuilderFieldList(
 								{
 									fields: instance._deserializeFields(deserializedColumn, column.fields)
 								}

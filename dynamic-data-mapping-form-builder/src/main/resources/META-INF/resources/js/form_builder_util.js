@@ -21,7 +21,7 @@ AUI.add(
 							}
 						},
 
-						AUGMENTS: [Liferay.DDL.FormBuilderSettingsSupport],
+						AUGMENTS: [Liferay.DDM.FormBuilderSettingsSupport],
 
 						EXTENDS: fieldClass,
 

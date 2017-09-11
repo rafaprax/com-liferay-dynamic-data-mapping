@@ -1,7 +1,7 @@
-{namespace DDLRuleBuilder}
+{namespace DDMRuleBuilder}
 
 /**
- * Prints the DDL form rule builder cotainer.
+ * Prints the DDM form rule builder cotainer.
  */
 {template .render}
 	{@param plusIcon: html}
@@ -23,7 +23,7 @@
 {/template}
 
 /**
- * Prints the DDL form card rule.
+ * Prints the DDM form card rule.
  */
 {template .rule_list}
 	{@param kebab: html}
@@ -64,7 +64,7 @@
 							<br />
 
 							{foreach $action in $rule.actions}
-								{delcall DDLRuleBuilder.action variant="$action.type"}
+								{delcall DDMRuleBuilder.action variant="$action.type"}
 									{param action: $action /}
 								{/delcall}
 								{if not isLast($action)}
@@ -103,7 +103,7 @@
 {/template}
 
 /**
- * Prints the DDL form card rule.
+ * Prints the DDM form card rule.
  */
 {template .empty_list}
 	{@param? message: string}
@@ -138,7 +138,7 @@
 {/template}
 
 /**
- * Prints the DDL form card rule.
+ * Prints the DDM form card rule.
  */
 {template .badge}
 	{@param? content: string}
@@ -186,7 +186,7 @@
 /**
  * Prints the show action.
  */
-{deltemplate DDLRuleBuilder.action variant="'show'"}
+{deltemplate DDMRuleBuilder.action variant="'show'"}
 	{@param action: ?}
 
 	<b>
@@ -202,7 +202,7 @@
 /**
  * Prints the enable action.
  */
-{deltemplate DDLRuleBuilder.action variant="'enable'"}
+{deltemplate DDMRuleBuilder.action variant="'enable'"}
 	{@param action: ?}
 
 	<b>
@@ -218,7 +218,7 @@
 /**
  * Prints the calculate action.
  */
-{deltemplate DDLRuleBuilder.action variant="'calculate'"}
+{deltemplate DDMRuleBuilder.action variant="'calculate'"}
 	{@param action: ?}
 
 	<b>
@@ -238,7 +238,7 @@
 /**
  * Prints the autofill action.
  */
-{deltemplate DDLRuleBuilder.action variant="'autofill'"}
+{deltemplate DDMRuleBuilder.action variant="'autofill'"}
 	{@param action: ?}
 
 	<b>
@@ -258,7 +258,7 @@
 /**
  * Prints the jump to page action.
  */
-{deltemplate DDLRuleBuilder.action variant="'jumptopage'"}
+{deltemplate DDMRuleBuilder.action variant="'jumptopage'"}
 	{@param action: ?}
 
 	<b>
@@ -274,7 +274,7 @@
 /**
  * Prints the require action.
  */
-{deltemplate DDLRuleBuilder.action variant="'require'"}
+{deltemplate DDMRuleBuilder.action variant="'require'"}
 	{@param action: ?}
 
 	<b>

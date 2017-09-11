@@ -1,15 +1,15 @@
 Liferay.Loader.require(
 	'frontend-js-metal-web/metal-soy-bundle/build/bundle',
-	'dynamic-data-lists-form-web/admin/templates/sidebar.es',
+	'dynamic-data-mapping-form-builder/templates/sidebar.es',
 	function(MetalSoyBundle, SideBar) {
-		if (!window.DDLSidebar) {
-			window.DDLSidebar = {};
+		if (!window.DDMSidebar) {
+			window.DDMSidebar = {};
 		}
 
 		SideBar.default.forEach(function(item) {
-			window.DDLSidebar[item.key] = item.component;
+			window.DDMSidebar[item.key] = item.component;
 		});
 
-		AUI.add('liferay-ddl-form-builder-sidebar-template');
+		AUI.add('liferay-ddm-form-builder-sidebar-template');
 	}
 );

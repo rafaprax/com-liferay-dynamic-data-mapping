@@ -32,7 +32,7 @@ AUI.add(
 					}
 				},
 
-				EXTENDS: Liferay.DDL.LayoutVisitor,
+				EXTENDS: Liferay.DDM.LayoutVisitor,
 
 				NAME: 'liferay-ddm-form-builder-definition-serializer',
 

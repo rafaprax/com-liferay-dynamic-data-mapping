@@ -134,7 +134,7 @@ AUI.add(
 
 						var strings = instance.get('strings');
 
-						var calculatorTemplateRenderer = Liferay.DDM.SoyTemplateUtil.getTemplateRenderer('DDLCalculator.render');
+						var calculatorTemplateRenderer = Liferay.DDM.SoyTemplateUtil.getTemplateRenderer('DDMCalculator.render');
 
 						var container = document.createDocumentFragment();
 

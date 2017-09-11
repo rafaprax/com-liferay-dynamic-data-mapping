@@ -5,7 +5,7 @@ AUI.add(
 
 		var Lang = A.Lang;
 
-		var Settings = Liferay.DDL.Settings;
+		var Settings = Liferay.DDM.Settings;
 
 		var TPL_CONTAINER_INPUT_OUTPUT_COMPONENT = '<div class="col-md-9 container-input-field container-input-field-{index}"></div>';
 
@@ -51,7 +51,7 @@ AUI.add(
 
 				AUGMENTS: [],
 
-				EXTENDS: Liferay.DDL.FormBuilderAction,
+				EXTENDS: Liferay.DDM.FormBuilderAction,
 
 				NAME: 'liferay-ddm-form-builder-action-autofill',
 
@@ -362,7 +362,7 @@ AUI.add(
 
 						var strings = instance.get('strings');
 
-						var dataProviderParametersTemplateRenderer = Liferay.DDM.SoyTemplateUtil.getTemplateRenderer('DDLDataProviderParameter.render');
+						var dataProviderParametersTemplateRenderer = Liferay.DDM.SoyTemplateUtil.getTemplateRenderer('DDMDataProviderParameter.render');
 
 						var container = document.createDocumentFragment();
 

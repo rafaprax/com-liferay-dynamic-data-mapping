@@ -1,7 +1,7 @@
-{namespace DDLSidebar}
+{namespace DDMSidebar}
 
 /**
- * Prints the DDL sidebar.
+ * Prints the DDM sidebar.
  */
 {template .render}
 	{@param? bodyContent: html}
@@ -20,7 +20,7 @@
 {/template}
 
 /**
- * Prints the DDL sidebar body.
+ * Prints the DDM sidebar body.
  */
 {template .body}
 	{@param? bodyContent: html}
@@ -35,11 +35,11 @@
 	{@param toolbarButtonIcon: html}
 	{@param? toolbarTemplateContext: [options: list<[buttonClass: string, handler: string, label: string]>]}
 
-	{call DDLFieldSettingsToolbar.render data="all" /}
+	{call DDMFieldSettingsToolbar.render data="all" /}
 {/template}
 
 /**
- * Prints the DDL sidebar header.
+ * Prints the DDM sidebar header.
  */
 {template .header}
 	{@param closeButtonIcon: html}

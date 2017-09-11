@@ -1,7 +1,7 @@
 AUI.add(
 	'liferay-ddm-form-builder-modal-support',
 	function(A) {
-		var Settings = Liferay.DDL.Settings;
+		var Settings = Liferay.DDM.Settings;
 
 		var FormBuilderModalSupport = function() {
 		};

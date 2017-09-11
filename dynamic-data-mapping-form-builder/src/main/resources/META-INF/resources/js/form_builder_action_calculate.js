@@ -7,7 +7,7 @@ AUI.add(
 
 		var OPERATORS_MAP = ['+', '-', '*', '/', '.'];
 
-		var Settings = Liferay.DDL.Settings;
+		var Settings = Liferay.DDM.Settings;
 
 		var FormBuilderActionCalculate = A.Component.create(
 			{
@@ -35,7 +35,7 @@ AUI.add(
 
 				AUGMENTS: [],
 
-				EXTENDS: Liferay.DDL.FormBuilderAction,
+				EXTENDS: Liferay.DDM.FormBuilderAction,
 
 				NAME: 'liferay-ddm-form-builder-action-calculate',
 
@@ -97,7 +97,7 @@ AUI.add(
 					_createCalculator: function() {
 						var instance = this;
 
-						var calculator = new Liferay.DDL.FormBuilderCalculator(
+						var calculator = new Liferay.DDM.FormBuilderCalculator(
 							{
 								functions: instance.get('functions'),
 								options: instance.get('options')
@@ -241,7 +241,7 @@ AUI.add(
 			}
 		);
 
-		Liferay.namespace('DDL').FormBuilderActionCalculate = FormBuilderActionCalculate;
+		Liferay.namespace('DDM').FormBuilderActionCalculate = FormBuilderActionCalculate;
 	},
 	'',
 	{

@@ -189,7 +189,7 @@ AUI.add(
 					_createToolbar: function() {
 						var instance = this;
 
-						var toolbar = new Liferay.DDL.FormBuilderFieldOptionsToolbar(
+						var toolbar = new Liferay.DDM.FormBuilderFieldOptionsToolbar(
 							{
 								formBuilder: instance.get('builder')
 							}

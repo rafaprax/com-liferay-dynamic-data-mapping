@@ -1,7 +1,7 @@
-{namespace DDLRule}
+{namespace DDMRule}
 
 /**
- * Prints the DDL rule settings.
+ * Prints the DDM rule settings.
  */
 {template .render}
 	{@param actions: list<string>}
@@ -17,7 +17,7 @@
 		<h4 class="text-default">{$strings.description}</h4>
 
 		<div class="ddl-form-body-content">
-			<ul class="liferay-ddl-form-builder-rule-condition-list liferay-ddl-form-rule-builder-timeline timeline {length($conditions) > 1 ? 'can-remove-item' : ''}">
+			<ul class="liferay-ddm-form-builder-rule-condition-list liferay-ddl-form-rule-builder-timeline timeline {length($conditions) > 1 ? 'can-remove-item' : ''}">
 				{let $showLogicalOperator: (length($conditions) > 1) ? true : false /}
 				{call .rulesHeader}
 					{param extraContent kind="html"}
@@ -52,7 +52,7 @@
 				{param plusIcon: $plusIcon /}
 			{/call}
 
-			<ul class="action-list liferay-ddl-form-builder-rule-action-list liferay-ddl-form-rule-builder-timeline timeline {length($actions) > 1 ? 'can-remove-item' : ''}">
+			<ul class="action-list liferay-ddm-form-builder-rule-action-list liferay-ddl-form-rule-builder-timeline timeline {length($actions) > 1 ? 'can-remove-item' : ''}">
 				{call .rulesHeader}
 					{param logicalOperator: $strings[$logicalOperator] /}
 					{param title: $strings.actions /}
@@ -91,7 +91,7 @@
 {/template}
 
 /**
- * Prints the DDL rule condition.
+ * Prints the DDM rule condition.
  */
 {template .condition}
 	{@param deleteIcon: html}
@@ -133,7 +133,7 @@
 {/template}
 
 /**
- * Prints the DDL rule condition.
+ * Prints the DDM rule condition.
  */
 {template .btnAddNewTimelineItem}
 	{@param? cssClass: string}
@@ -192,7 +192,7 @@
 {/template}
 
 /**
- * Prints the DDL property change action.
+ * Prints the DDM property change action.
  */
 {template .action}
 	{@param deleteIcon: html}

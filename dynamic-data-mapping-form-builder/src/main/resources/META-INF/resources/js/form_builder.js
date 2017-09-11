@@ -3,15 +3,15 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 
-		var FormBuilderConfirmDialog = Liferay.DDL.FormBuilderConfirmationDialog;
+		var FormBuilderConfirmDialog = Liferay.DDM.FormBuilderConfirmationDialog;
 
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 
-		var FormBuilderUtil = Liferay.DDL.FormBuilderUtil;
+		var FormBuilderUtil = Liferay.DDM.FormBuilderUtil;
 
 		var Lang = A.Lang;
 
-		var Settings = Liferay.DDL.Settings;
+		var Settings = Liferay.DDM.Settings;
 
 		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
 
@@ -113,7 +113,7 @@ AUI.add(
 							boundingBox.delegate('click', A.bind('_afterFieldClick', instance), '.' + CSS_FIELD, instance),
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
 							instance.after('editingLanguageIdChange', instance._afterEditingLanguageIdChange),
-							instance.after('liferay-ddl-form-builder-field-list:fieldsChange', instance._afterFieldListChange, instance),
+							instance.after('liferay-ddm-form-builder-field-list:fieldsChange', instance._afterFieldListChange, instance),
 							instance.after('render', instance._afterFormBuilderRender, instance),
 							instance.after(instance._afterRemoveField, instance, 'removeField')
 						];
@@ -340,7 +340,7 @@ AUI.add(
 							function(layout) {
 								instance._fieldsChangeHandles.push(
 									layout.after(
-										'liferay-ddl-form-builder-field-list:fieldsChange',
+										'liferay-ddm-form-builder-field-list:fieldsChange',
 										A.bind(instance._afterFieldsChange, instance)
 									)
 								);
@@ -464,7 +464,7 @@ AUI.add(
 					_createFieldSettingsPanel: function() {
 						var instance = this;
 
-						var sidebar = new Liferay.DDL.FormBuilderFieldsSettingsSidebar(
+						var sidebar = new Liferay.DDM.FormBuilderFieldsSettingsSidebar(
 							{
 								builder: instance
 							}
@@ -489,7 +489,7 @@ AUI.add(
 						if (!instance._pageManager) {
 							var context = instance.get('context');
 
-							instance._pageManager = new Liferay.DDL.FormBuilderPagesManager(
+							instance._pageManager = new Liferay.DDM.FormBuilderPagesManager(
 								A.merge(
 									{
 										builder: instance,
@@ -582,7 +582,7 @@ AUI.add(
 					},
 
 					_makeEmptyFieldList: function(col) {
-						col.set('value', new Liferay.DDL.FormBuilderFieldList());
+						col.set('value', new Liferay.DDM.FormBuilderFieldList());
 					},
 
 					_onClickPaginationItem: function(event) {
@@ -752,7 +752,7 @@ AUI.add(
 					_valueDeserializer: function() {
 						var instance = this;
 
-						return new Liferay.DDL.LayoutDeserializer(
+						return new Liferay.DDM.LayoutDeserializer(
 							{
 								builder: instance
 							}
@@ -816,10 +816,10 @@ AUI.add(
 			}
 		);
 
-		Liferay.namespace('DDL').FormBuilder = FormBuilder;
+		Liferay.namespace('DDM').FormBuilder = FormBuilder;
 	},
 	'',
 	{
-		requires: ['aui-form-builder', 'aui-form-builder-pages', 'aui-popover', 'liferay-ddm-form-builder-confirmation-dialog', 'liferay-ddl-form-builder-field-settings-sidebar', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-type', 'liferay-ddm-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
+		requires: ['aui-form-builder', 'aui-form-builder-pages', 'aui-popover', 'liferay-ddm-form-builder-confirmation-dialog', 'liferay-ddm-form-builder-field-settings-sidebar', 'liferay-ddm-form-builder-field-support', 'liferay-ddm-form-builder-field-type', 'liferay-ddm-form-builder-field-types-modal', 'liferay-ddm-form-builder-layout-deserializer', 'liferay-ddm-form-builder-layout-visitor', 'liferay-ddm-form-builder-pages-manager', 'liferay-ddm-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
 	}
 );

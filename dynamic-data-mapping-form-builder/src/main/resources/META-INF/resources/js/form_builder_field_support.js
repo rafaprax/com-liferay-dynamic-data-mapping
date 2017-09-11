@@ -5,9 +5,9 @@ AUI.add(
 
 		var FieldTypes = Renderer.FieldTypes;
 
-		var Settings = Liferay.DDL.Settings;
+		var Settings = Liferay.DDM.Settings;
 
-		var FormBuilderUtil = Liferay.DDL.FormBuilderUtil;
+		var FormBuilderUtil = Liferay.DDM.FormBuilderUtil;
 
 		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
 

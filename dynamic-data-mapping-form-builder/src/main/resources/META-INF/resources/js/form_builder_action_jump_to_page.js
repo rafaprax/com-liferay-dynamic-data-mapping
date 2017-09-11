@@ -23,7 +23,7 @@ AUI.add(
 
 				AUGMENTS: [],
 
-				EXTENDS: Liferay.DDL.FormBuilderAction,
+				EXTENDS: Liferay.DDM.FormBuilderAction,
 
 				NAME: 'liferay-ddm-form-builder-action-jump-to-page',
 

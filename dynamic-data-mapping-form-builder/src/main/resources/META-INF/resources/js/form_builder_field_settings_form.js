@@ -218,7 +218,7 @@ AUI.add(
 					_getAutocompleteCardActionTemplate: function() {
 						var instance = this;
 
-						var actionPanelRenderer = SoyTemplateUtil.getTemplateRenderer('DDLAutoComplete.actionPanel');
+						var actionPanelRenderer = SoyTemplateUtil.getTemplateRenderer('DDMAutoComplete.actionPanel');
 
 						var container = document.createDocumentFragment();
 
@@ -236,7 +236,7 @@ AUI.add(
 					_getAutocompleteContainerTemplate: function() {
 						var instance = this;
 
-						var autocompleteContainerRenderer = SoyTemplateUtil.getTemplateRenderer('DDLAutoComplete.container');
+						var autocompleteContainerRenderer = SoyTemplateUtil.getTemplateRenderer('DDMAutoComplete.container');
 
 						var container = document.createDocumentFragment();
 
@@ -450,7 +450,7 @@ AUI.add(
 			}
 		);
 
-		Liferay.namespace('DDL').FormBuilderSettingsForm = FormBuilderSettingsForm;
+		Liferay.namespace('DDM').FormBuilderSettingsForm = FormBuilderSettingsForm;
 	},
 	'',
 	{

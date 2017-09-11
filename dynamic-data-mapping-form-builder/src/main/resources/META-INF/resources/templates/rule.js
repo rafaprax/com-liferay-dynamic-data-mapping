@@ -1,15 +1,15 @@
 Liferay.Loader.require(
 	'frontend-js-metal-web/metal-soy-bundle/build/bundle',
-	'dynamic-data-lists-form-web/admin/templates/rule.es',
+	'dynamic-data-mapping-form-builder/templates/rule.es',
 	function(MetalSoyBundle, Rule) {
-		if (!window.DDLRule) {
-			window.DDLRule = {};
+		if (!window.DDMRule) {
+			window.DDMRule = {};
 		}
 
 		Rule.default.forEach(function(item) {
-			window.DDLRule[item.key] = item.component;
+			window.DDMRule[item.key] = item.component;
 		});
 
-		AUI.add('liferay-ddl-form-builder-rule-template');
+		AUI.add('liferay-ddm-form-builder-rule-template');
 	}
 );

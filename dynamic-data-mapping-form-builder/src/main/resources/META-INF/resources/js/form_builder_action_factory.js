@@ -1,7 +1,7 @@
 AUI.add(
 	'liferay-ddm-form-builder-action-factory',
 	function(A) {
-		var Settings = Liferay.DDL.Settings;
+		var Settings = Liferay.DDM.Settings;
 
 		var FormBuilderActionFactory = A.Component.create(
 			{
@@ -34,7 +34,7 @@ AUI.add(
 						var action;
 
 						if (instance._isPropertyAction(type)) {
-							action = new Liferay.DDL.FormBuilderActionProperty(
+							action = new Liferay.DDM.FormBuilderActionProperty(
 								{
 									action: act,
 									boundingBox: container,
@@ -46,7 +46,7 @@ AUI.add(
 							);
 						}
 						else if (type === 'jump-to-page') {
-							action = new Liferay.DDL.FormBuilderActionJumpToPage(
+							action = new Liferay.DDM.FormBuilderActionJumpToPage(
 								{
 									action: act,
 									boundingBox: container,
@@ -57,7 +57,7 @@ AUI.add(
 							);
 						}
 						else if (type === 'auto-fill') {
-							action = new Liferay.DDL.FormBuilderActionAutofill(
+							action = new Liferay.DDM.FormBuilderActionAutofill(
 								{
 									action: act,
 									boundingBox: container,
@@ -70,7 +70,7 @@ AUI.add(
 							);
 						}
 						else if (type === 'calculate') {
-							action = new Liferay.DDL.FormBuilderActionCalculate(
+							action = new Liferay.DDM.FormBuilderActionCalculate(
 								{
 									action: act,
 									boundingBox: container,

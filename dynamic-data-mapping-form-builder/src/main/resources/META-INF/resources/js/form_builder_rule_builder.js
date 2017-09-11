@@ -215,7 +215,7 @@ AUI.add(
 						var instance = this;
 
 						if (!instance._ruleClasses) {
-							instance._ruleClasses = new Liferay.DDL.FormBuilderRenderRule(
+							instance._ruleClasses = new Liferay.DDM.FormBuilderRenderRule(
 								{
 									boundingBox: instance.get('boundingBox'),
 									bubbleTargets: [instance],

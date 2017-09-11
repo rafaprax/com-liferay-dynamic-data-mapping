@@ -98,7 +98,7 @@ AUI.add(
 				var target = event.target;
 
 				if (!target.hasClass(CSS_LAYOUT_BUILDER_MOVE_CUT_COL_BUTTON)) {
-					Liferay.DDL.FormBuilder.superclass._onClickOutsideMoveColTarget.apply(instance, arguments);
+					Liferay.DDM.FormBuilder.superclass._onClickOutsideMoveColTarget.apply(instance, arguments);
 				}
 			},
 

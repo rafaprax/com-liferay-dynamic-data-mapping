@@ -54,7 +54,7 @@ AUI.add(
 				},
 
 				AUGMENTS: [
-					Liferay.DDL.FormBuilderRenderRuleCondition
+					Liferay.DDM.FormBuilderRenderRuleCondition
 				],
 
 				NAME: 'liferay-ddm-form-builder-render-rule',
@@ -67,7 +67,7 @@ AUI.add(
 
 						instance._conditions = {};
 
-						instance._actionFactory = new Liferay.DDL.FormBuilderActionFactory(
+						instance._actionFactory = new Liferay.DDM.FormBuilderActionFactory(
 							{
 								bubbleTargets: [instance],
 								fields: instance.get('fields'),
@@ -76,7 +76,7 @@ AUI.add(
 							}
 						);
 
-						instance._validator = new Liferay.DDL.FormBuilderRuleValidator();
+						instance._validator = new Liferay.DDM.FormBuilderRuleValidator();
 					},
 
 					bindUI: function() {
@@ -429,7 +429,7 @@ AUI.add(
 					_handleAddActionClick: function() {
 						var instance = this;
 
-						var actionListNode = instance.get('boundingBox').one('.liferay-ddl-form-builder-rule-action-list');
+						var actionListNode = instance.get('boundingBox').one('.liferay-ddm-form-builder-rule-action-list');
 
 						var index = instance._actionsIndexes[instance._actionsIndexes.length - 1] + 1;
 
@@ -580,10 +580,10 @@ AUI.add(
 			}
 		);
 
-		Liferay.namespace('DDL').FormBuilderRenderRule = FormBuilderRenderRule;
+		Liferay.namespace('DDM').FormBuilderRenderRule = FormBuilderRenderRule;
 	},
 	'',
 	{
-		requires: ['liferay-ddl-form-builder-render-rule-condition', 'liferay-ddl-form-builder-rule-template', 'liferay-ddm-form-renderer-field']
+		requires: ['liferay-ddm-form-builder-render-rule-condition', 'liferay-ddm-form-builder-rule-template', 'liferay-ddm-form-renderer-field']
 	}
 );

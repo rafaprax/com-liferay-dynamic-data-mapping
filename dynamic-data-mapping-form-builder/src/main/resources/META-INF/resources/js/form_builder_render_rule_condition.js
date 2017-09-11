@@ -9,7 +9,7 @@ AUI.add(
 
 		var CSS_CAN_REMOVE_ITEM = A.getClassName('can', 'remove', 'item');
 
-		var Settings = Liferay.DDL.Settings;
+		var Settings = Liferay.DDM.Settings;
 
 		var FormBuilderRenderRuleCondition = function(config) {};
 
@@ -39,7 +39,7 @@ AUI.add(
 
 				instance.after('*:valueChange', A.bind(instance._handleConditionFieldsChange, instance));
 
-				instance._validator = new Liferay.DDL.FormBuilderRuleValidator();
+				instance._validator = new Liferay.DDM.FormBuilderRuleValidator();
 			},
 
 			_addCondition: function(index, condition) {
@@ -296,11 +296,11 @@ AUI.add(
 			_handleAddConditionClick: function() {
 				var instance = this;
 
-				var conditionListNode = instance.get('boundingBox').one('.liferay-ddl-form-builder-rule-condition-list');
+				var conditionListNode = instance.get('boundingBox').one('.liferay-ddm-form-builder-rule-condition-list');
 
 				var index = instance._conditionsIndexes[instance._conditionsIndexes.length - 1] + 1;
 
-				var conditionTemplateRenderer = Liferay.DDM.SoyTemplateUtil.getTemplateRenderer('DDLRule.condition');
+				var conditionTemplateRenderer = Liferay.DDM.SoyTemplateUtil.getTemplateRenderer('DDMRule.condition');
 
 				var container = document.createDocumentFragment();
 
@@ -642,7 +642,7 @@ AUI.add(
 
 				var contentBox = instance.get('contentBox');
 
-				var conditionList = contentBox.one('.liferay-ddl-form-builder-rule-condition-list');
+				var conditionList = contentBox.one('.liferay-ddm-form-builder-rule-condition-list');
 
 				var conditionItems = conditionList.all('.timeline-item');
 
@@ -652,7 +652,7 @@ AUI.add(
 			_updateLogicOperatorEnableState: function() {
 				var instance = this;
 
-				var logicOperatorNode = instance.get('boundingBox').one('.liferay-ddl-form-builder-rule-condition-list').one('.dropdown button');
+				var logicOperatorNode = instance.get('boundingBox').one('.liferay-ddm-form-builder-rule-condition-list').one('.dropdown button');
 
 				if (instance._conditionsIndexes.length > 1) {
 					logicOperatorNode.removeAttribute('disabled');
