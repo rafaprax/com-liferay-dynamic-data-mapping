@@ -16,7 +16,7 @@
 				<name>ddmForm</name>
 				<inputType>com.liferay.dynamic.data.mapping.model.DDMForm</inputType>
 				<outputType>com.liferay.dynamic.data.mapping.model.DDMForm</outputType>
-				<required>true</required>
+				<required>false</required>
 			</attribute>
 		</attributes>
 	</component>

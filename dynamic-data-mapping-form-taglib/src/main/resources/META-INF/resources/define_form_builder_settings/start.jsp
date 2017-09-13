@@ -15,3 +15,15 @@
 --%>
 
 <%@ include file="/define_form_builder_settings/init.jsp" %>
+
+<aui:script>
+Liferay.namespace('DDM').Settings = {
+	functionsMetadata: <%= functionsMetadata %>,
+	getDataProviderInstancesURL: '<%= ddmDataProviderInstancesURL %>',
+	getDataProviderParametersSettingsURL: '<%= ddmDataProviderInstanceParameterSettingsURL %>',
+	getFieldTypeSettingFormContextURL: '<%= ddmFieldSettingsDDMFormContextURL %>',
+	getFunctionsURL: '<%= ddmFunctionsURL %>',
+	getRolesURL: '<%= rolesURL %>',
+	rules: <%= serializedDDMFormRules %>
+}
+</aui:script>

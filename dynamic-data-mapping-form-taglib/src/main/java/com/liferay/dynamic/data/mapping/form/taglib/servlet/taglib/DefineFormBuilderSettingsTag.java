@@ -15,9 +15,58 @@
 package com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib;
 
 import com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.base.BaseDefineFormBuilderSettingsTag;
+import com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.util.FormTaglibContextUtil;
+import com.liferay.dynamic.data.mapping.model.DDMForm;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Rafael Praxedes
  */
-public class DefineFormBuilderSettingsTag extends BaseDefineFormBuilderSettingsTag {
+public class DefineFormBuilderSettingsTag
+	extends BaseDefineFormBuilderSettingsTag {
+
+	protected DDMForm getDDMForm() {
+		DDMForm ddmForm = super.getDdmForm();
+
+		if (ddmForm == null) {
+			return new DDMForm();
+		}
+
+		return ddmForm;
+	}
+
+	@Override
+	protected void setAttributes(HttpServletRequest request) {
+		super.setAttributes(request);
+
+		setNamespacedAttribute(
+			request, "functionsMetadata",
+			FormTaglibContextUtil.
+				getSerializedDDMExpressionFunctionsMetadata());
+		setNamespacedAttribute(
+			request, "ddmDataProviderInstanceParameterSettingsURL",
+			FormTaglibContextUtil.
+				getDDMDataProviderInstanceParameterSettingsURL());
+		setNamespacedAttribute(
+			request, "ddmDataProviderInstancesURL",
+			FormTaglibContextUtil.getDDMDataProviderInstancesURL());
+		setNamespacedAttribute(
+			request, "ddmFieldSettingsDDMFormContextURL",
+			FormTaglibContextUtil.getDDMFieldSettingsDDMFormContextURL());
+		setNamespacedAttribute(
+			request, "ddmFunctionsURL",
+			FormTaglibContextUtil.getDDMFunctionsURL());
+		setNamespacedAttribute(
+			request, "rolesURL", FormTaglibContextUtil.getRolesURL());
+		setNamespacedAttribute(
+			request, "serializedDDMFormRules",
+			FormTaglibContextUtil.getSerializedDDMFormRules(getDDMForm()));
+	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		DefineFormBuilderSettingsTag.class);
+
 }

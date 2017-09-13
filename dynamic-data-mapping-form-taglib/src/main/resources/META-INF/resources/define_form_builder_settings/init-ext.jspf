@@ -14,10 +14,14 @@
  */
 --%>
 
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+
 <%
+String functionsMetadata = (String)request.getAttribute("liferay-form:define-form-builder-settings:functionsMetadata");
 String ddmDataProviderInstanceParameterSettingsURL = (String)request.getAttribute("liferay-form:define-form-builder-settings:ddmDataProviderInstanceParameterSettingsURL");
 String ddmDataProviderInstancesURL = (String)request.getAttribute("liferay-form:define-form-builder-settings:ddmDataProviderInstancesURL");
 String ddmFieldSettingsDDMFormContextURL = (String)request.getAttribute("liferay-form:define-form-builder-settings:ddmFieldSettingsDDMFormContextURL");
 String ddmFunctionsURL = (String)request.getAttribute("liferay-form:define-form-builder-settings:ddmFunctionsURL");
 String rolesURL = (String)request.getAttribute("liferay-form:define-form-builder-settings:rolesURL");
+String serializedDDMFormRules = (String)request.getAttribute("liferay-form:define-form-builder-settings:serializedDDMFormRules");
 %>

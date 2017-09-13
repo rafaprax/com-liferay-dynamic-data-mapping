@@ -15,7 +15,7 @@
 		</attribute>
 		<attribute>
 			<name>ddmForm</name>
-			<required>true</required>
+			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 			<type>com.liferay.dynamic.data.mapping.model.DDMForm</type>
 		</attribute>

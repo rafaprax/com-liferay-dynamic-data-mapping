@@ -15,6 +15,7 @@
 package com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.util;
 
 import com.liferay.dynamic.data.mapping.form.builder.DDMFormBuilderSettings;
+import com.liferay.dynamic.data.mapping.model.DDMForm;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -26,56 +27,71 @@ import org.osgi.service.component.annotations.Reference;
 public class FormTaglibContextUtil {
 
 	public static String getDDMDataProviderInstanceParameterSettingsURL() {
-		DDMFormBuilderSettings ddmFormBuilderContext =
-			getDDMFormBuilderContext();
-		
-		return ddmFormBuilderContext.
+		DDMFormBuilderSettings ddmFormBuilderSettings =
+			getDDMFormBuilderSettings();
+
+		return ddmFormBuilderSettings.
 			getDDMDataProviderInstanceParameterSettingsURL();
 	}
 
 	public static String getDDMDataProviderInstancesURL() {
-		DDMFormBuilderSettings ddmFormBuilderContext =
-			getDDMFormBuilderContext();
-		
-		return ddmFormBuilderContext.getDDMDataProviderInstancesURL();
+		DDMFormBuilderSettings ddmFormBuilderSettings =
+			getDDMFormBuilderSettings();
+
+		return ddmFormBuilderSettings.getDDMDataProviderInstancesURL();
 	}
 
 	public static String getDDMFieldSettingsDDMFormContextURL() {
-		DDMFormBuilderSettings ddmFormBuilderContext =
-			getDDMFormBuilderContext();
-		
-		return ddmFormBuilderContext.getDDMFieldSettingsDDMFormContextURL();
+		DDMFormBuilderSettings ddmFormBuilderSettings =
+			getDDMFormBuilderSettings();
+
+		return ddmFormBuilderSettings.getDDMFieldSettingsDDMFormContextURL();
 	}
 
 	public static String getDDMFunctionsURL() {
-		DDMFormBuilderSettings ddmFormBuilderContext =
-			getDDMFormBuilderContext();
-		
-		return ddmFormBuilderContext.getDDMFunctionsURL();
+		DDMFormBuilderSettings ddmFormBuilderSettings =
+			getDDMFormBuilderSettings();
+
+		return ddmFormBuilderSettings.getDDMFunctionsURL();
 	}
 
 	public static String getRolesURL() {
-		DDMFormBuilderSettings ddmFormBuilderContext =
-			getDDMFormBuilderContext();
-		
-		return ddmFormBuilderContext.getRolesURL();
+		DDMFormBuilderSettings ddmFormBuilderSettings =
+			getDDMFormBuilderSettings();
+
+		return ddmFormBuilderSettings.getRolesURL();
 	}
 
-	protected static DDMFormBuilderSettings getDDMFormBuilderContext() {
-		if (_ddmFormBuilderContext == null) {
+	public static String getSerializedDDMExpressionFunctionsMetadata() {
+		DDMFormBuilderSettings ddmFormBuilderSettings =
+			getDDMFormBuilderSettings();
+
+		return ddmFormBuilderSettings.
+			getSerializedDDMExpressionFunctionsMetadata();
+	}
+
+	public static String getSerializedDDMFormRules(DDMForm ddmForm) {
+		DDMFormBuilderSettings ddmFormBuilderSettings =
+			getDDMFormBuilderSettings();
+
+		return ddmFormBuilderSettings.getSerializedDDMFormRules(ddmForm);
+	}
+
+	protected static DDMFormBuilderSettings getDDMFormBuilderSettings() {
+		if (_ddmFormBuilderSettings == null) {
 			throw new IllegalStateException();
 		}
 
-		return _ddmFormBuilderContext;
+		return _ddmFormBuilderSettings;
 	}
 
 	@Reference(unbind = "-")
-	protected void setDDMFormBuilderContext(
-		DDMFormBuilderSettings ddmFormBuilderContext) {
+	protected void setDDMFormBuilderSettings(
+		DDMFormBuilderSettings ddmFormBuilderSettings) {
 
-		_ddmFormBuilderContext = ddmFormBuilderContext;
+		_ddmFormBuilderSettings = ddmFormBuilderSettings;
 	}
 
-	private static DDMFormBuilderSettings _ddmFormBuilderContext;
+	private static DDMFormBuilderSettings _ddmFormBuilderSettings;
 
 }

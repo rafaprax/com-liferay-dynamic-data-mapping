@@ -47,7 +47,7 @@ AUI.add(
 									A.io.request(
 										Settings.getFieldTypeSettingFormContextURL,
 										{
-											data: Liferay.Util.ns(Settings.portletNamespace, payload),
+											data: payload,
 											dataType: 'JSON',
 											method: 'GET',
 											on: {
