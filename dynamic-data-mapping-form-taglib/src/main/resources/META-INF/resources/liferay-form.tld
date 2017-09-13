@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+	<tlib-version>1.0</tlib-version>
+	<short-name>liferay-form</short-name>
+	<uri>http://liferay.com/tld/form</uri>
+	<tag>
+		<name>define-form-builder-settings</name>
+		<tag-class>com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.DefineFormBuilderSettingsTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<name>portletNamespace</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>ddmForm</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>com.liferay.dynamic.data.mapping.model.DDMForm</type>
+		</attribute>
+		<dynamic-attributes>true</dynamic-attributes>
+	</tag>
+</taglib>

@@ -4,7 +4,7 @@
 	AUI().applyConfig(
 		{
 			groups: {
-				'form': {
+				'form-builder': {
 					base: MODULE_PATH + '/js/',
 					combine: Liferay.AUI.getCombine(),
 					filter: LiferayAUI.getFilterConfig(),
@@ -88,12 +88,6 @@
 						'liferay-ddm-form-builder-confirmation-dialog': {
 							path: 'form_builder_confirmation_dialog.js',
 							requires: []
-						},
-						'liferay-ddm-form-builder-copy-publish-form-url-popover': {
-							path: 'form_builder_copy_publish_form_url_popover.js',
-							requires: [
-								'aui-popover'
-							]
 						},
 						'liferay-ddm-form-builder-data-provider-parameter-template': {
 							path: '../templates/data-provider-parameter.js'

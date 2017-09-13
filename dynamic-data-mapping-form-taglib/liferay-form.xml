@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<taglibs osgi-module="true" short-name="liferay-form" tlib-version="1.0" uri="http://liferay.com/tld/form">
+	<authors>
+		<author>Rafael Praxedes</author>
+	</authors>
+	<component bodyContent="true" name="DefineFormBuilderSettings" writeJSP="true">
+		<attributes>
+			<attribute>
+				<name>portletNamespace</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+				<required>true</required>
+			</attribute>
+			<attribute>
+				<name>ddmForm</name>
+				<inputType>com.liferay.dynamic.data.mapping.model.DDMForm</inputType>
+				<outputType>com.liferay.dynamic.data.mapping.model.DDMForm</outputType>
+				<required>true</required>
+			</attribute>
+		</attributes>
+	</component>
+</taglibs>

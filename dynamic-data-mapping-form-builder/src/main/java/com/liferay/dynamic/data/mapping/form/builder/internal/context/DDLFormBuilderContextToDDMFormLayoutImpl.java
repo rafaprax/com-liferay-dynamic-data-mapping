@@ -14,6 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.context;
 
+import com.liferay.dynamic.data.mapping.form.builder.DDLFormBuilderContextToDDMFormLayout;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayout;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutColumn;
 import com.liferay.dynamic.data.mapping.model.DDMFormLayoutPage;
@@ -40,8 +41,10 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true, service = DDLFormBuilderContextToDDMFormLayout.class
 )
-public class DDLFormBuilderContextToDDMFormLayout {
+public class DDLFormBuilderContextToDDMFormLayoutImpl
+	implements DDLFormBuilderContextToDDMFormLayout {
 
+	@Override
 	public DDMFormLayout deserialize(String serializedFormBuilderContext)
 		throws PortalException {
 

@@ -14,6 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.context;
 
+import com.liferay.dynamic.data.mapping.form.builder.DDLFormBuilderContextToDDMForm;
 import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDLFormRuleDeserializer;
 import com.liferay.dynamic.data.mapping.form.builder.internal.converter.DDLFormRuleToDDMFormRuleConverter;
 import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRule;
@@ -51,8 +52,10 @@ import org.osgi.service.component.annotations.Reference;
  * @author Marcellus Tavares
  */
 @Component(immediate = true, service = DDLFormBuilderContextToDDMForm.class)
-public class DDLFormBuilderContextToDDMForm {
+public class DDLFormBuilderContextToDDMFormImpl
+	implements DDLFormBuilderContextToDDMForm {
 
+	@Override
 	public DDMForm deserialize(String serializedFormBuilderContext)
 		throws PortalException {
 
@@ -383,6 +386,6 @@ public class DDLFormBuilderContextToDDMForm {
 	protected JSONFactory jsonFactory;
 
 	private static final Log _log = LogFactoryUtil.getLog(
-		DDLFormBuilderContextToDDMForm.class);
+		DDLFormBuilderContextToDDMFormImpl.class);
 
 }
