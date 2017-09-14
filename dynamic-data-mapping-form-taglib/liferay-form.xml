@@ -4,19 +4,37 @@
 	<authors>
 		<author>Rafael Praxedes</author>
 	</authors>
-	<component bodyContent="true" name="DefineFormBuilderSettings" writeJSP="true">
+	<component bodyContent="true" name="FormBuilder" writeJSP="true">
 		<attributes>
-			<attribute>
-				<name>portletNamespace</name>
-				<inputType>java.lang.String</inputType>
-				<outputType>java.lang.String</outputType>
-				<required>true</required>
-			</attribute>
 			<attribute>
 				<name>ddmForm</name>
 				<inputType>com.liferay.dynamic.data.mapping.model.DDMForm</inputType>
 				<outputType>com.liferay.dynamic.data.mapping.model.DDMForm</outputType>
 				<required>false</required>
+			</attribute>
+			<attribute>
+				<name>ddmFormBuilderContext</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+				<required>false</required>
+			</attribute>
+			<attribute>
+				<name>defaultLanguageId</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+				<required>true</required>
+			</attribute>
+			<attribute>
+				<name>editingLanguageId</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+				<required>true</required>
+			</attribute>
+			<attribute>
+				<name>refererPortletNamespace</name>
+				<inputType>java.lang.String</inputType>
+				<outputType>java.lang.String</outputType>
+				<required>true</required>
 			</attribute>
 		</attributes>
 	</component>

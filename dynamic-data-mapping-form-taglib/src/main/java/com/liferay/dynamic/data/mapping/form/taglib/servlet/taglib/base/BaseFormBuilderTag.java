@@ -33,12 +33,44 @@ public abstract class BaseFormBuilderTag extends com.liferay.taglib.util.Include
 		return super.doStartTag();
 	}
 
-	public java.lang.String getPortletNamespace() {
-		return _portletNamespace;
+	public com.liferay.dynamic.data.mapping.model.DDMForm getDdmForm() {
+		return _ddmForm;
 	}
 
-	public void setPortletNamespace(java.lang.String portletNamespace) {
-		_portletNamespace = portletNamespace;
+	public java.lang.String getDdmFormBuilderContext() {
+		return _ddmFormBuilderContext;
+	}
+
+	public java.lang.String getDefaultLanguageId() {
+		return _defaultLanguageId;
+	}
+
+	public java.lang.String getEditingLanguageId() {
+		return _editingLanguageId;
+	}
+
+	public java.lang.String getRefererPortletNamespace() {
+		return _refererPortletNamespace;
+	}
+
+	public void setDdmForm(com.liferay.dynamic.data.mapping.model.DDMForm ddmForm) {
+		_ddmForm = ddmForm;
+	}
+
+	public void setDdmFormBuilderContext(java.lang.String ddmFormBuilderContext) {
+		_ddmFormBuilderContext = ddmFormBuilderContext;
+	}
+
+	public void setDefaultLanguageId(java.lang.String defaultLanguageId) {
+		_defaultLanguageId = defaultLanguageId;
+	}
+
+	public void setEditingLanguageId(java.lang.String editingLanguageId) {
+		_editingLanguageId = editingLanguageId;
+	}
+
+	public void setRefererPortletNamespace(java.lang.String refererPortletNamespace) {
+		_refererPortletNamespace = refererPortletNamespace;
 	}
 
 	@Override
@@ -52,7 +84,11 @@ public abstract class BaseFormBuilderTag extends com.liferay.taglib.util.Include
 	protected void cleanUp() {
 		super.cleanUp();
 
-		_portletNamespace = null;
+		_ddmForm = null;
+		_ddmFormBuilderContext = null;
+		_defaultLanguageId = null;
+		_editingLanguageId = null;
+		_refererPortletNamespace = null;
 	}
 
 	@Override
@@ -67,7 +103,11 @@ public abstract class BaseFormBuilderTag extends com.liferay.taglib.util.Include
 
 	@Override
 	protected void setAttributes(HttpServletRequest request) {
-		request.setAttribute("liferay-form:form-builder:portletNamespace", _portletNamespace);
+		request.setAttribute("liferay-form:form-builder:ddmForm", _ddmForm);
+		request.setAttribute("liferay-form:form-builder:ddmFormBuilderContext", _ddmFormBuilderContext);
+		request.setAttribute("liferay-form:form-builder:defaultLanguageId", _defaultLanguageId);
+		request.setAttribute("liferay-form:form-builder:editingLanguageId", _editingLanguageId);
+		request.setAttribute("liferay-form:form-builder:refererPortletNamespace", _refererPortletNamespace);
 	}
 
 	protected static final String _ATTRIBUTE_NAMESPACE = "liferay-form:form-builder:";
@@ -78,6 +118,10 @@ public abstract class BaseFormBuilderTag extends com.liferay.taglib.util.Include
 	private static final String _START_PAGE =
 		"/form_builder/start.jsp";
 
-	private java.lang.String _portletNamespace = null;
+	private com.liferay.dynamic.data.mapping.model.DDMForm _ddmForm = null;
+	private java.lang.String _ddmFormBuilderContext = null;
+	private java.lang.String _defaultLanguageId = null;
+	private java.lang.String _editingLanguageId = null;
+	private java.lang.String _refererPortletNamespace = null;
 
 }

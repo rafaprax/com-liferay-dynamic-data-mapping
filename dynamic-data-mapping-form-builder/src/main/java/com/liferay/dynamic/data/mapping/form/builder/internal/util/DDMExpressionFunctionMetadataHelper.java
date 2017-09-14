@@ -15,19 +15,105 @@
 package com.liferay.dynamic.data.mapping.form.builder.internal.util;
 
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.util.AggregateResourceBundle;
+import com.liferay.portal.kernel.util.ResourceBundleLoader;
+import com.liferay.portal.kernel.util.ResourceBundleLoaderUtil;
+import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import org.osgi.service.component.annotations.Component;
 
 /**
  * @author Rafael Praxedes
  */
+@Component(immediate = true, service = DDMExpressionFunctionMetadataHelper.class)
 public class DDMExpressionFunctionMetadataHelper {
 
-	public DDMExpressionFunctionMetadataHelper(ResourceBundle resourceBundle) {
+	public Map<String, List<DDMExpressionFunctionMetadata>>
+		getDDMExpressionFunctionsMetadata(Locale locale) {
+
+		if (_ddmExpressionFunctionsMetadata.isEmpty()) {
+			populateMap(getResourceBundle(locale));
+		}
+
+		return _ddmExpressionFunctionsMetadata;
+	}
+
+	public static class DDMExpressionFunctionMetadata {
+
+		public DDMExpressionFunctionMetadata(
+			String name, String label, String returnType,
+			String[] parameterTypes) {
+
+			_name = name;
+			_label = label;
+			_returnType = returnType;
+			_parameterTypes = parameterTypes;
+		}
+
+		public String getLabel() {
+			return _label;
+		}
+
+		public String getName() {
+			return _name;
+		}
+
+		public String[] getParameterTypes() {
+			return _parameterTypes;
+		}
+
+		public String getReturnType() {
+			return _returnType;
+		}
+
+		private final String _label;
+		private final String _name;
+		private final String[] _parameterTypes;
+		private final String _returnType;
+
+	}
+
+	protected void addDDMExpressionFunctionMetadata(
+		DDMExpressionFunctionMetadata expressionFunctionMetadata) {
+
+		String firstParameterType =
+			expressionFunctionMetadata.getParameterTypes()[0];
+
+		List<DDMExpressionFunctionMetadata> expressionFunctionMetadataList =
+			_ddmExpressionFunctionsMetadata.get(firstParameterType);
+
+		if (expressionFunctionMetadataList == null) {
+			expressionFunctionMetadataList = new ArrayList<>();
+
+			_ddmExpressionFunctionsMetadata.put(
+				firstParameterType, expressionFunctionMetadataList);
+		}
+
+		expressionFunctionMetadataList.add(expressionFunctionMetadata);
+	}
+
+	protected ResourceBundle getResourceBundle(Locale locale) {
+		ResourceBundleLoader portalResourceBundleLoader =
+			ResourceBundleLoaderUtil.getPortalResourceBundleLoader();
+
+		ResourceBundle portalResourceBundle =
+			portalResourceBundleLoader.loadResourceBundle(locale);
+
+		ResourceBundle portletResourceBundle = ResourceBundleUtil.getBundle(
+			"content.Language", locale, getClass());
+
+		return new AggregateResourceBundle(
+			portletResourceBundle, portalResourceBundle);
+	}
+
+	protected void populateMap(ResourceBundle resourceBundle) {
 		addDDMExpressionFunctionMetadata(
 			new DDMExpressionFunctionMetadata(
 				"belongs-to", LanguageUtil.get(resourceBundle, "belongs-to"),
@@ -110,66 +196,6 @@ public class DDMExpressionFunctionMetadataHelper {
 				"not-is-empty",
 				LanguageUtil.get(resourceBundle, "is-not-empty"), _TYPE_BOOLEAN,
 				new String[] {_TYPE_TEXT}));
-	}
-
-	public Map<String, List<DDMExpressionFunctionMetadata>>
-		getDDMExpressionFunctionsMetadata() {
-
-		return _ddmExpressionFunctionsMetadata;
-	}
-
-	public static class DDMExpressionFunctionMetadata {
-
-		public DDMExpressionFunctionMetadata(
-			String name, String label, String returnType,
-			String[] parameterTypes) {
-
-			_name = name;
-			_label = label;
-			_returnType = returnType;
-			_parameterTypes = parameterTypes;
-		}
-
-		public String getLabel() {
-			return _label;
-		}
-
-		public String getName() {
-			return _name;
-		}
-
-		public String[] getParameterTypes() {
-			return _parameterTypes;
-		}
-
-		public String getReturnType() {
-			return _returnType;
-		}
-
-		private final String _label;
-		private final String _name;
-		private final String[] _parameterTypes;
-		private final String _returnType;
-
-	}
-
-	protected void addDDMExpressionFunctionMetadata(
-		DDMExpressionFunctionMetadata expressionFunctionMetadata) {
-
-		String firstParameterType =
-			expressionFunctionMetadata.getParameterTypes()[0];
-
-		List<DDMExpressionFunctionMetadata> expressionFunctionMetadataList =
-			_ddmExpressionFunctionsMetadata.get(firstParameterType);
-
-		if (expressionFunctionMetadataList == null) {
-			expressionFunctionMetadataList = new ArrayList<>();
-
-			_ddmExpressionFunctionsMetadata.put(
-				firstParameterType, expressionFunctionMetadataList);
-		}
-
-		expressionFunctionMetadataList.add(expressionFunctionMetadata);
 	}
 
 	private static final String _TYPE_BOOLEAN = "boolean";

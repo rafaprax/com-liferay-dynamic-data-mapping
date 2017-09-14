@@ -1,9 +1,9 @@
-.liferay-ddl-form-rule-builder {
-	.ddl-form-basic-info {
+.liferay-ddm-form-rule-builder {
+	.ddm-form-basic-info {
 		display: none;
 	}
 
-	.ddl-form-builder-app {
+	.ddm-form-builder-app {
 		margin-top: 0;
 	}
 
@@ -14,7 +14,7 @@
 	}
 }
 
-.liferay-ddl-form-rule-builder-timeline {
+.liferay-ddm-form-rule-builder-timeline {
 	margin-bottom: 0;
 
 	&.can-remove-item {
@@ -319,7 +319,7 @@
 	}
 }
 
-.liferay-ddl-form-rule-builder-footer {
+.liferay-ddm-form-rule-builder-footer {
 	margin: $baseline * 3 0;
 	padding: 12px 54px;
 }

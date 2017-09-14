@@ -12,16 +12,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-
-@generated
 --%>
 
-<%@ include file="/init.jsp" %>
-
-<%
-java.lang.String portletNamespace = GetterUtil.getString((java.lang.String)request.getAttribute("liferay-form:define-form-builder-settings:portletNamespace"));
-com.liferay.dynamic.data.mapping.model.DDMForm ddmForm = (com.liferay.dynamic.data.mapping.model.DDMForm)request.getAttribute("liferay-form:define-form-builder-settings:ddmForm");
-Map<String, Object> dynamicAttributes = (Map<String, Object>)request.getAttribute("liferay-form:define-form-builder-settings:dynamicAttributes");
-%>
-
-<%@ include file="/define_form_builder_settings/init-ext.jspf" %>
+<%@ include file="/form_builder/init.jsp" %>

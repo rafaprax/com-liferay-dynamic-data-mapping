@@ -18,6 +18,8 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 
+import java.util.Locale;
+
 /**
  * @author Rafael Praxedes
  */
@@ -34,7 +36,7 @@ public interface DDMFormBuilderSettings {
 
 	public String getRolesURL();
 
-	public String getSerializedDDMExpressionFunctionsMetadata();
+	public String getSerializedDDMExpressionFunctionsMetadata(Locale locale);
 
 	public String getSerializedDDMFormRules(DDMForm ddmForm);
 

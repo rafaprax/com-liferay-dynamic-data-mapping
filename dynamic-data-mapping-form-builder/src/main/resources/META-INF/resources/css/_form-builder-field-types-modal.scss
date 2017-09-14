@@ -1,10 +1,10 @@
-.lfr-ddl-form-builder-field-types-modal {
+.lfr-ddm-form-builder-field-types-modal {
 	height: 100%;
 	margin: 0;
 	outline: none;
 	width: 100%;
 
-	&.lfr-ddl-form-builder-field-types-modal-hidden {
+	&.lfr-ddm-form-builder-field-types-modal-hidden {
 		display: none;
 	}
 
@@ -51,14 +51,14 @@
 }
 
 @include sm {
-	.lfr-ddl-form-builder-field-types-modal {
+	.lfr-ddm-form-builder-field-types-modal {
 		max-height: 550px;
 		width: 392px;
 	}
 }
 
 @include md {
-	.lfr-ddl-form-builder-field-types-modal {
+	.lfr-ddm-form-builder-field-types-modal {
 		width: 500px;
 
 		.field-type {

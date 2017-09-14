@@ -17,6 +17,8 @@ package com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.util;
 import com.liferay.dynamic.data.mapping.form.builder.DDMFormBuilderSettings;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 
+import java.util.Locale;
+
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -62,12 +64,14 @@ public class FormTaglibContextUtil {
 		return ddmFormBuilderSettings.getRolesURL();
 	}
 
-	public static String getSerializedDDMExpressionFunctionsMetadata() {
+	public static String getSerializedDDMExpressionFunctionsMetadata(
+		Locale locale) {
+
 		DDMFormBuilderSettings ddmFormBuilderSettings =
 			getDDMFormBuilderSettings();
 
 		return ddmFormBuilderSettings.
-			getSerializedDDMExpressionFunctionsMetadata();
+			getSerializedDDMExpressionFunctionsMetadata(locale);
 	}
 
 	public static String getSerializedDDMFormRules(DDMForm ddmForm) {

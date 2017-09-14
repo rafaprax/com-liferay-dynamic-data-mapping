@@ -14,19 +14,31 @@
 
 package com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib;
 
-import com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.base.BaseDefineFormBuilderSettingsTag;
+import com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.base.BaseFormBuilderTag;
 import com.liferay.dynamic.data.mapping.form.taglib.servlet.taglib.util.FormTaglibContextUtil;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.WebKeys;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Rafael Praxedes
  */
-public class DefineFormBuilderSettingsTag
-	extends BaseDefineFormBuilderSettingsTag {
+public class FormBuilderTag extends BaseFormBuilderTag {
+
+	public String getDDMFormBuilderContext() {
+		String ddmFormBuilderContext = super.getDdmFormBuilderContext();
+
+		if (ddmFormBuilderContext == null) {
+			return StringPool.BLANK;
+		}
+
+		return ddmFormBuilderContext;
+	}
 
 	protected DDMForm getDDMForm() {
 		DDMForm ddmForm = super.getDdmForm();
@@ -42,10 +54,16 @@ public class DefineFormBuilderSettingsTag
 	protected void setAttributes(HttpServletRequest request) {
 		super.setAttributes(request);
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		setNamespacedAttribute(
+			request, "formBuilderContext", getDDMFormBuilderContext());
 		setNamespacedAttribute(
 			request, "functionsMetadata",
 			FormTaglibContextUtil.
-				getSerializedDDMExpressionFunctionsMetadata());
+				getSerializedDDMExpressionFunctionsMetadata(
+					themeDisplay.getLocale()));
 		setNamespacedAttribute(
 			request, "ddmDataProviderInstanceParameterSettingsURL",
 			FormTaglibContextUtil.
@@ -66,7 +84,6 @@ public class DefineFormBuilderSettingsTag
 			FormTaglibContextUtil.getSerializedDDMFormRules(getDDMForm()));
 	}
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		DefineFormBuilderSettingsTag.class);
+	private static final Log _log = LogFactoryUtil.getLog(FormBuilderTag.class);
 
 }

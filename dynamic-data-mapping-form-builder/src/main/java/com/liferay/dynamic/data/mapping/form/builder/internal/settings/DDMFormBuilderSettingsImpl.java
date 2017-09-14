@@ -22,27 +22,22 @@ import com.liferay.dynamic.data.mapping.form.builder.internal.util.DDMExpression
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONSerializer;
-import com.liferay.portal.kernel.util.AggregateResourceBundle;
-import com.liferay.portal.kernel.util.LocaleThreadLocal;
-import com.liferay.portal.kernel.util.ResourceBundleLoader;
-import com.liferay.portal.kernel.util.ResourceBundleLoaderUtil;
-import com.liferay.portal.kernel.util.ResourceBundleUtil;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
-import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Rafael Praxedes
  */
+@Component(immediate = true)
 public class DDMFormBuilderSettingsImpl implements DDMFormBuilderSettings {
 
 	@Override
@@ -89,13 +84,13 @@ public class DDMFormBuilderSettingsImpl implements DDMFormBuilderSettings {
 	}
 
 	@Override
-	public String getSerializedDDMExpressionFunctionsMetadata() {
+	public String getSerializedDDMExpressionFunctionsMetadata(Locale locale) {
 		JSONSerializer jsonSerializer = _jsonFactory.createJSONSerializer();
 
 		Map<String, List<DDMExpressionFunctionMetadata>>
 			ddmExpressionFunctionsMetadata =
 				_ddmExpressionFunctionMetadataHelper.
-					getDDMExpressionFunctionsMetadata();
+					getDDMExpressionFunctionsMetadata(locale);
 
 		return jsonSerializer.serializeDeep(ddmExpressionFunctionsMetadata);
 	}
@@ -117,28 +112,6 @@ public class DDMFormBuilderSettingsImpl implements DDMFormBuilderSettings {
 		ServletContext servletContext = servletConfig.getServletContext();
 
 		return servletContext.getContextPath();
-	}
-
-	@Activate
-	protected void activate() {
-		_ddmExpressionFunctionMetadataHelper =
-			new DDMExpressionFunctionMetadataHelper(getResourceBundle());
-	}
-
-	protected ResourceBundle getResourceBundle() {
-		ResourceBundleLoader portalResourceBundleLoader =
-			ResourceBundleLoaderUtil.getPortalResourceBundleLoader();
-
-		Locale themeDisplayLocale = LocaleThreadLocal.getThemeDisplayLocale();
-
-		ResourceBundle portalResourceBundle =
-			portalResourceBundleLoader.loadResourceBundle(themeDisplayLocale);
-
-		ResourceBundle portletResourceBundle = ResourceBundleUtil.getBundle(
-			"content.Language", themeDisplayLocale, getClass());
-
-		return new AggregateResourceBundle(
-			portletResourceBundle, portalResourceBundle);
 	}
 
 	@Reference(
@@ -191,8 +164,11 @@ public class DDMFormBuilderSettingsImpl implements DDMFormBuilderSettings {
 
 	private Servlet _ddmDataProviderInstanceParameterSettingsServlet;
 	private Servlet _ddmDataProviderInstancesServlet;
+
+	@Reference
 	private DDMExpressionFunctionMetadataHelper
 		_ddmExpressionFunctionMetadataHelper;
+
 	private Servlet _ddmFieldSettingsDDMFormContextServlet;
 	private Servlet _ddmFormFunctionsServlet;
 
