@@ -250,13 +250,15 @@ AUI.add(
 					_fillDataProviders: function() {
 						var instance = this;
 
+						var payload = {
+							bcp47LanguageId: themeDisplay.getBCP47LanguageId(),
+							scopeGroupId: themeDisplay.getScopeGroupId()
+						};
+
 						A.io.request(
 							Settings.getDataProviderInstancesURL,
 							{
-								data: {
-									languageId: themeDisplay.getLanguageId(),
-									scopeGroupId: themeDisplay.getScopeGroupId()
-								},
+								data: payload,
 								method: 'GET',
 								on: {
 									success: function(event, id, xhr) {
@@ -384,7 +386,7 @@ AUI.add(
 
 						return rulesDescription;
 					},
-					
+
 					_getUserRoles: function() {
 						var instance = this;
 

@@ -14,27 +14,33 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.servlet;
 
-import com.liferay.dynamic.data.mapping.model.DDMDataProviderInstance;
-import com.liferay.dynamic.data.mapping.service.DDMDataProviderInstanceLocalService;
-import com.liferay.dynamic.data.mapping.util.comparator.DataProviderInstanceNameComparator;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldType;
+import com.liferay.dynamic.data.mapping.form.field.type.DDMFormFieldTypeServicesTracker;
+import com.liferay.dynamic.data.mapping.form.renderer.DDMFormRenderingContext;
+import com.liferay.dynamic.data.mapping.form.renderer.DDMFormTemplateContextFactory;
+import com.liferay.dynamic.data.mapping.form.values.factory.DDMFormValuesFactory;
+import com.liferay.dynamic.data.mapping.io.DDMFormJSONDeserializer;
+import com.liferay.dynamic.data.mapping.model.DDMForm;
+import com.liferay.dynamic.data.mapping.model.DDMFormLayout;
+import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
+import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
+import com.liferay.dynamic.data.mapping.util.DDMFormLayoutFactory;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
-import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.json.JSONSerializer;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
-import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -59,71 +65,46 @@ import org.osgi.service.component.annotations.Reference;
 )
 public class DDMFieldSettingsDDMFormContextServlet extends HttpServlet {
 
-	@Override
-	protected void doGet(
-			HttpServletRequest request, HttpServletResponse response)
-		throws IOException, ServletException {
-
-		JSONArray dataProviderInstancesJSONArray =
-			getDataProviderInstancesJSONArray(request);
-
-		if (dataProviderInstancesJSONArray == null) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-
-			return;
-		}
-
-		response.setContentType(ContentTypes.APPLICATION_JSON);
-		response.setStatus(HttpServletResponse.SC_OK);
-
-		ServletResponseUtil.write(
-			response, dataProviderInstancesJSONArray.toJSONString());
-	}
-
-	protected JSONArray getDataProviderInstancesJSONArray(
-		HttpServletRequest request) {
+	protected Map<String, Object> createFieldSettingsFormContext(
+		HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
-				WebKeys.THEME_DISPLAY);
+			String bcp47LanguageId = ParamUtil.getString(
+				request, "bcp47LanguageId");
+			String portletNamespace = ParamUtil.getString(
+				request, "portletNamespace");
+			String type = ParamUtil.getString(request, "type");
 
-			Locale locale = themeDisplay.getLocale();
-			long[] groupIds = _portal.getCurrentAndAncestorSiteGroupIds(
-				themeDisplay.getScopeGroupId());
+			Locale locale = Locale.forLanguageTag(bcp47LanguageId);
 
-			int start = ParamUtil.getInteger(
-				request, "start", QueryUtil.ALL_POS);
-			int end = ParamUtil.getInteger(request, "end", QueryUtil.ALL_POS);
+			LocaleThreadLocal.setThemeDisplayLocale(locale);
 
-			DataProviderInstanceNameComparator
-				dataProviderInstanceNameComparator =
-					new DataProviderInstanceNameComparator(true);
+			Class<?> ddmFormFieldTypeSettings = getDDMFormFieldTypeSettings(
+				type);
 
-			List<DDMDataProviderInstance> ddmDataProviderInstances =
-				_ddmDataProviderInstanceLocalService.getDataProviderInstances(
-					groupIds, start, end, dataProviderInstanceNameComparator);
+			DDMForm ddmFormFieldTypeSettingsDDMForm = DDMFormFactory.create(
+				ddmFormFieldTypeSettings);
 
-			JSONArray dataProviderInstancesJSONArray =
-				_jsonFactory.createJSONArray();
+			DDMFormLayout ddmFormFieldTypeSettingsDDMFormLayout =
+				DDMFormLayoutFactory.create(ddmFormFieldTypeSettings);
 
-			for (DDMDataProviderInstance ddmDataProviderInstance :
-					ddmDataProviderInstances) {
+			DDMFormRenderingContext ddmFormRenderingContext =
+				new DDMFormRenderingContext();
 
-				JSONObject dataProviderInstanceJSONObject =
-					_jsonFactory.createJSONObject();
+			DDMFormValues ddmFormValues = _ddmFormValuesFactory.create(
+				request, ddmFormFieldTypeSettingsDDMForm);
 
-				dataProviderInstanceJSONObject.put(
-					"id", ddmDataProviderInstance.getDataProviderInstanceId());
-				dataProviderInstanceJSONObject.put(
-					"name", ddmDataProviderInstance.getName(locale));
-				dataProviderInstanceJSONObject.put(
-					"uuid", ddmDataProviderInstance.getUuid());
+			ddmFormRenderingContext.setDDMFormValues(ddmFormValues);
 
-				dataProviderInstancesJSONArray.put(
-					dataProviderInstanceJSONObject);
-			}
+			ddmFormRenderingContext.setHttpServletRequest(request);
+			ddmFormRenderingContext.setHttpServletResponse(response);
+			ddmFormRenderingContext.setContainerId("settings");
+			ddmFormRenderingContext.setLocale(locale);
+			ddmFormRenderingContext.setPortletNamespace(portletNamespace);
 
-			return dataProviderInstancesJSONArray;
+			return _ddmFormTemplateContextFactory.create(
+				ddmFormFieldTypeSettingsDDMForm,
+				ddmFormFieldTypeSettingsDDMFormLayout, ddmFormRenderingContext);
 		}
 		catch (PortalException pe) {
 			if (_log.isDebugEnabled()) {
@@ -134,14 +115,52 @@ public class DDMFieldSettingsDDMFormContextServlet extends HttpServlet {
 		return null;
 	}
 
+	@Override
+	protected void doGet(
+			HttpServletRequest request, HttpServletResponse response)
+		throws IOException, ServletException {
+
+		Map<String, Object> fieldSettingsFormContext =
+			createFieldSettingsFormContext(request, response);
+
+		if (fieldSettingsFormContext == null) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+
+			return;
+		}
+
+		response.setContentType(ContentTypes.APPLICATION_JSON);
+		response.setStatus(HttpServletResponse.SC_OK);
+
+		JSONSerializer jsonSerializer = _jsonFactory.createJSONSerializer();
+
+		ServletResponseUtil.write(
+			response, jsonSerializer.serializeDeep(fieldSettingsFormContext));
+	}
+
+	protected Class<?> getDDMFormFieldTypeSettings(String type) {
+		DDMFormFieldType ddmFormFieldType =
+			_ddmFormFieldTypeServicesTracker.getDDMFormFieldType(type);
+
+		return ddmFormFieldType.getDDMFormFieldTypeSettings();
+	}
+
 	private static final Log _log = LogFactoryUtil.getLog(
 		DDMFieldSettingsDDMFormContextServlet.class);
 
 	private static final long serialVersionUID = 1L;
 
 	@Reference
-	private DDMDataProviderInstanceLocalService
-		_ddmDataProviderInstanceLocalService;
+	private DDMFormFieldTypeServicesTracker _ddmFormFieldTypeServicesTracker;
+
+	@Reference
+	private DDMFormJSONDeserializer _ddmFormJSONDeserializer;
+
+	@Reference
+	private DDMFormTemplateContextFactory _ddmFormTemplateContextFactory;
+
+	@Reference
+	private DDMFormValuesFactory _ddmFormValuesFactory;
 
 	@Reference
 	private JSONFactory _jsonFactory;

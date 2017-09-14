@@ -41,6 +41,8 @@ AUI.add(
 								}
 								else {
 									var payload = {
+										bcp47LanguageId: themeDisplay.getBCP47LanguageId(),
+										portletNamespace: Settings.portletNamespace,
 										type: type
 									};
 

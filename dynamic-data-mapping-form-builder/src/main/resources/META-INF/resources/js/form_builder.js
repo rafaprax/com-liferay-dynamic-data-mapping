@@ -406,6 +406,7 @@ AUI.add(
 						var instance = this;
 
 						instance._fieldToolbar.destroy();
+						instance.getFieldSettingsPanel();
 						instance._renderFields();
 						instance._renderPages();
 						instance._renderRequiredFieldsWarning();

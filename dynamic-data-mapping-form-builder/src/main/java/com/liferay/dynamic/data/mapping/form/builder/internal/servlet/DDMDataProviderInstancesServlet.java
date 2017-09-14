@@ -26,12 +26,9 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
-import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ContentTypes;
-import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Portal;
-import com.liferay.portal.kernel.util.WebKeys;
 
 import java.io.IOException;
 
@@ -86,10 +83,13 @@ public class DDMDataProviderInstancesServlet extends HttpServlet {
 		HttpServletRequest request) {
 
 		try {
-			String languageId = ParamUtil.getString(request, "languageId");
-			Locale locale = LanguageUtil.getLocale(languageId);
+			String bcp47LanguageId = ParamUtil.getString(
+				request, "bcp47LanguageId");
+
+			Locale locale = Locale.forLanguageTag(bcp47LanguageId);
 
 			long scopeGroupId = ParamUtil.getLong(request, "scopeGroupId");
+
 			long[] groupIds = _portal.getCurrentAndAncestorSiteGroupIds(
 				scopeGroupId);
 
