@@ -253,6 +253,10 @@ AUI.add(
 						A.io.request(
 							Settings.getDataProviderInstancesURL,
 							{
+								data: {
+									languageId: themeDisplay.getLanguageId(),
+									scopeGroupId: themeDisplay.getScopeGroupId()
+								},
 								method: 'GET',
 								on: {
 									success: function(event, id, xhr) {
@@ -380,7 +384,7 @@ AUI.add(
 
 						return rulesDescription;
 					},
-
+					
 					_getUserRoles: function() {
 						var instance = this;
 
@@ -390,6 +394,10 @@ AUI.add(
 							A.io.request(
 								Settings.getRolesURL,
 								{
+									data: {
+										languageId: themeDisplay.getLanguageId(),
+										scopeGroupId: themeDisplay.getScopeGroupId()
+									},
 									method: 'GET',
 									on: {
 										success: function(event, id, xhr) {

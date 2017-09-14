@@ -16,8 +16,9 @@
 
 <%@ include file="/form_builder/init.jsp" %>
 
-<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-rule-builder">
+<aui:script>
 	Liferay.namespace('DDM').Settings = {
+		portletNamespace: '<%= refererPortletNamespace %>',
 		functionsMetadata: <%= functionsMetadata %>,
 		getDataProviderInstancesURL: '<%= ddmDataProviderInstancesURL %>',
 		getDataProviderParametersSettingsURL: '<%= ddmDataProviderInstanceParameterSettingsURL %>',
@@ -25,6 +26,9 @@
 		getFunctionsURL: '<%= ddmFunctionsURL %>',
 		getRolesURL: '<%= rolesURL %>'
 	}
+</aui:script>
+
+<aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-rule-builder">
 
 	var <%= refererPortletNamespace %>formBuilder = new Liferay.DDM.FormBuilder(
 			{
