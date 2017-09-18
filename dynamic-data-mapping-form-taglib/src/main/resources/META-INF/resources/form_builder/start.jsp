@@ -31,23 +31,29 @@
 
 <aui:script use="liferay-ddm-form-builder, liferay-ddm-form-builder-rule-builder">
 
-	var <%= refererPortletNamespace %>formBuilder = new Liferay.DDM.FormBuilder(
-			{
-				context: <%= ddmFormBuilderContext %>,
-				defaultLanguageId: '<%= defaultLanguageId %>',
-				editingLanguageId: '<%= editingLanguageId %>'
-			}
-		);
+	Liferay.component(
+		'<%= refererPortletNamespace %>formBuilder',
+		function() {
+			return new Liferay.DDM.FormBuilder(
+				{
+					context: <%= ddmFormBuilderContext %>,
+					defaultLanguageId: '<%= defaultLanguageId %>',
+					editingLanguageId: '<%= editingLanguageId %>'
+				}
+			);
+		}
+	);
 
-	Liferay.component('<%= refererPortletNamespace %>formBuilder', <%= refererPortletNamespace %>formBuilder);
-
-	var <%= refererPortletNamespace %>ruleBuilder = new Liferay.DDM.FormBuilderRuleBuilder(
-			{
-				formBuilder: <%= refererPortletNamespace %>formBuilder,
-				rules: <%= serializedDDMFormRules %>,
-				visible: false
-			}
-		);
-
-	Liferay.component('<%= refererPortletNamespace %>ruleBuilder', <%= refererPortletNamespace %>ruleBuilder);
+	Liferay.component(
+		'<%= refererPortletNamespace %>ruleBuilder',
+		function() {
+			return new Liferay.DDM.FormBuilderRuleBuilder(
+				{
+					formBuilder: Liferay.component('<%= refererPortletNamespace %>formBuilder'),
+					rules: <%= serializedDDMFormRules %>,
+					visible: false
+				}
+			);
+		}
+	);
 </aui:script>
