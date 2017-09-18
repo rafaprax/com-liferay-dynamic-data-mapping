@@ -32,6 +32,8 @@ public interface DDMFormBuilderSettings {
 
 	public String getDDMFieldSettingsDDMFormContextURL();
 
+	public String getDDMFormContextProviderURL();
+
 	public String getDDMFunctionsURL();
 
 	public String getRolesURL();

@@ -58,12 +58,14 @@ public class FormBuilderTag extends BaseFormBuilderTag {
 			WebKeys.THEME_DISPLAY);
 
 		setNamespacedAttribute(
+			request, "evaluatorURL",
+			FormTaglibContextUtil.getDDMFormContextProviderURL());
+		setNamespacedAttribute(
 			request, "formBuilderContext", getDDMFormBuilderContext());
 		setNamespacedAttribute(
 			request, "functionsMetadata",
-			FormTaglibContextUtil.
-				getSerializedDDMExpressionFunctionsMetadata(
-					themeDisplay.getLocale()));
+			FormTaglibContextUtil.getSerializedDDMExpressionFunctionsMetadata(
+				themeDisplay.getLocale()));
 		setNamespacedAttribute(
 			request, "ddmDataProviderInstanceParameterSettingsURL",
 			FormTaglibContextUtil.

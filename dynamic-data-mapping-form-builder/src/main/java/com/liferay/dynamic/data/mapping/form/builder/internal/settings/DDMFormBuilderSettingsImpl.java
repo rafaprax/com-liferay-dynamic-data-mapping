@@ -68,6 +68,15 @@ public class DDMFormBuilderSettingsImpl implements DDMFormBuilderSettings {
 	}
 
 	@Override
+	public String getDDMFormContextProviderURL() {
+		String servletContextPath = getServletContextPath(
+			_ddmFormContextProviderServlet);
+
+		return servletContextPath.concat(
+			"/dynamic-data-mapping-form-context-provider/");
+	}
+
+	@Override
 	public String getDDMFunctionsURL() {
 		String servletContextPath = getServletContextPath(
 			_ddmFormFunctionsServlet);
@@ -147,6 +156,16 @@ public class DDMFormBuilderSettingsImpl implements DDMFormBuilderSettings {
 	}
 
 	@Reference(
+		target = "(osgi.http.whiteboard.servlet.name=com.liferay.dynamic.data.mapping.form.renderer.internal.servlet.DDMFormContextProviderServlet)",
+		unbind = "-"
+	)
+	protected void setDDMFormContextProviderServlet(
+		Servlet ddmFormContextProviderServlet) {
+
+		_ddmFormContextProviderServlet = ddmFormContextProviderServlet;
+	}
+
+	@Reference(
 		target = "(osgi.http.whiteboard.servlet.name=com.liferay.dynamic.data.mapping.form.builder.internal.servlet.DDMFormFunctionsServlet)",
 		unbind = "-"
 	)
@@ -170,6 +189,7 @@ public class DDMFormBuilderSettingsImpl implements DDMFormBuilderSettings {
 		_ddmExpressionFunctionMetadataHelper;
 
 	private Servlet _ddmFieldSettingsDDMFormContextServlet;
+	private Servlet _ddmFormContextProviderServlet;
 	private Servlet _ddmFormFunctionsServlet;
 
 	@Reference

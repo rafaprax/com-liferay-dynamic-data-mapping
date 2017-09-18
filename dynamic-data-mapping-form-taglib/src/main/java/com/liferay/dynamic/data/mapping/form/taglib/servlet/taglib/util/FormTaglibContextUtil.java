@@ -50,6 +50,13 @@ public class FormTaglibContextUtil {
 		return ddmFormBuilderSettings.getDDMFieldSettingsDDMFormContextURL();
 	}
 
+	public static String getDDMFormContextProviderURL() {
+		DDMFormBuilderSettings ddmFormBuilderSettings =
+			getDDMFormBuilderSettings();
+
+		return ddmFormBuilderSettings.getDDMFormContextProviderURL();
+	}
+
 	public static String getDDMFunctionsURL() {
 		DDMFormBuilderSettings ddmFormBuilderSettings =
 			getDDMFormBuilderSettings();

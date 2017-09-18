@@ -18,13 +18,14 @@
 
 <aui:script>
 	Liferay.namespace('DDM').Settings = {
-		portletNamespace: '<%= refererPortletNamespace %>',
+		evaluatorURL: '<%= evaluatorURL %>',
 		functionsMetadata: <%= functionsMetadata %>,
 		getDataProviderInstancesURL: '<%= ddmDataProviderInstancesURL %>',
 		getDataProviderParametersSettingsURL: '<%= ddmDataProviderInstanceParameterSettingsURL %>',
 		getFieldTypeSettingFormContextURL: '<%= ddmFieldSettingsDDMFormContextURL %>',
 		getFunctionsURL: '<%= ddmFunctionsURL %>',
-		getRolesURL: '<%= rolesURL %>'
+		getRolesURL: '<%= rolesURL %>',
+		portletNamespace: '<%= refererPortletNamespace %>'
 	}
 </aui:script>
 

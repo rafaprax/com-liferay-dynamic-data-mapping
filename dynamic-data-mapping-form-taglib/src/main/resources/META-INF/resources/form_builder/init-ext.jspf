@@ -17,6 +17,7 @@
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 
 <%
+String evaluatorURL = (String)request.getAttribute("liferay-form:form-builder:evaluatorURL");
 String functionsMetadata = (String)request.getAttribute("liferay-form:form-builder:functionsMetadata");
 String ddmDataProviderInstanceParameterSettingsURL = (String)request.getAttribute("liferay-form:form-builder:ddmDataProviderInstanceParameterSettingsURL");
 String ddmDataProviderInstancesURL = (String)request.getAttribute("liferay-form:form-builder:ddmDataProviderInstancesURL");
