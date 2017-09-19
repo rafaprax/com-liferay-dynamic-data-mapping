@@ -14,7 +14,9 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.context;
 
-import com.liferay.dynamic.data.mapping.form.builder.util.DDMFormTemplateContextVisitor;
+import com.liferay.dynamic.data.mapping.form.builder.context.DDMFormContextDeserializer;
+import com.liferay.dynamic.data.mapping.form.builder.context.DDMFormContextDeserializerRequest;
+import com.liferay.dynamic.data.mapping.form.builder.context.DDMFormContextVisitor;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
@@ -28,6 +30,7 @@ import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,9 +47,14 @@ import org.osgi.service.component.annotations.Reference;
  * @author Marcellus Tavares
  */
 @Component(
-	immediate = true, service = DDMFormTemplateContextToDDMFormValues.class
+	immediate = true,
+	property = {
+		"dynamic.data.mapping.form.builder.context.deserializer.type=formValues"
+	},
+	service = DDMFormContextDeserializer.class
 )
-public class DDMFormTemplateContextToDDMFormValues {
+public class DDMFormContextToDDMFormValues
+	implements DDMFormContextDeserializer<DDMFormValues> {
 
 	public DDMFormValues deserialize(
 			DDMForm ddmForm, String serializedFormContext)
@@ -68,6 +76,28 @@ public class DDMFormTemplateContextToDDMFormValues {
 		return ddmFormValues;
 	}
 
+	@Override
+	public DDMFormValues deserialize(
+			DDMFormContextDeserializerRequest contextDeserializerRequest)
+		throws PortalException {
+
+		String serializedFormContext = contextDeserializerRequest.getProperty(
+			"serializedFormContext");
+
+		if (Validator.isNull(serializedFormContext)) {
+			throw new IllegalStateException(
+				"serializedFormContext property is required");
+		}
+
+		DDMForm ddmForm = contextDeserializerRequest.getProperty("ddmForm");
+
+		if (Validator.isNull(serializedFormContext)) {
+			throw new IllegalStateException("ddmForm property is required");
+		}
+
+		return deserialize(ddmForm, serializedFormContext);
+	}
+
 	protected List<DDMFormFieldValue> getDDMFormFieldValues(
 		JSONArray jsonArray, DDMForm ddmForm) {
 
@@ -76,8 +106,8 @@ public class DDMFormTemplateContextToDDMFormValues {
 		Map<String, DDMFormField> ddmFormFieldsMap =
 			ddmForm.getDDMFormFieldsMap(true);
 
-		DDMFormTemplateContextVisitor ddmFormTemplateContextVisitor =
-			new DDMFormTemplateContextVisitor(jsonArray);
+		DDMFormContextVisitor ddmFormTemplateContextVisitor =
+			new DDMFormContextVisitor(jsonArray);
 
 		ddmFormTemplateContextVisitor.onVisitField(
 			new Consumer<JSONObject>() {
