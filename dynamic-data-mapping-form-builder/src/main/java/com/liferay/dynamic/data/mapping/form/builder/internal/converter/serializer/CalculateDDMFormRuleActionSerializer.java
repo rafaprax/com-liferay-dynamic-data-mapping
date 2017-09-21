@@ -14,7 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.CalculateDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.CalculateDDMFormRuleAction;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.portal.kernel.util.CharPool;
@@ -28,18 +28,18 @@ import java.util.stream.Stream;
 /**
  * @author Leonardo Barros
  */
-public class CalculateDDLFormRuleActionSerializer
-	implements DDLFormRuleActionSerializer {
+public class CalculateDDMFormRuleActionSerializer
+	implements DDMFormRuleActionSerializer {
 
-	public CalculateDDLFormRuleActionSerializer(
-		CalculateDDLFormRuleAction calculateDDLFormRuleAction) {
+	public CalculateDDMFormRuleActionSerializer(
+		CalculateDDMFormRuleAction calculateDDMFormRuleAction) {
 
-		_calculateDDLFormRuleAction = calculateDDLFormRuleAction;
+		_calculateDDLFormRuleAction = calculateDDMFormRuleAction;
 	}
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddlFormRuleSerializerContext) {
 
 		DDMForm ddmForm = ddlFormRuleSerializerContext.getAttribute("form");
 
@@ -138,6 +138,6 @@ public class CalculateDDLFormRuleActionSerializer
 		"%s('%s', %s)";
 	private static final String _functionCallUnaryExpressionFormat = "%s('%s')";
 
-	private final CalculateDDLFormRuleAction _calculateDDLFormRuleAction;
+	private final CalculateDDMFormRuleAction _calculateDDLFormRuleAction;
 
 }

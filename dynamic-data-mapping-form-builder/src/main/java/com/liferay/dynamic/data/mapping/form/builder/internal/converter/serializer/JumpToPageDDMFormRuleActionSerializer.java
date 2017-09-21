@@ -14,23 +14,23 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.JumpToPageDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.JumpToPageDDMFormRuleAction;
 
 /**
  * @author Leonardo Barros
  */
-public class JumpToPageDDLFormRuleActionSerializer
-	implements DDLFormRuleActionSerializer {
+public class JumpToPageDDMFormRuleActionSerializer
+	implements DDMFormRuleActionSerializer {
 
-	public JumpToPageDDLFormRuleActionSerializer(
-		JumpToPageDDLFormRuleAction jumpToPageDDLFormRuleAction) {
+	public JumpToPageDDMFormRuleActionSerializer(
+		JumpToPageDDMFormRuleAction jumpToPageDDMFormRuleAction) {
 
-		_jumpToPageDDLFormRuleAction = jumpToPageDDLFormRuleAction;
+		_jumpToPageDDLFormRuleAction = jumpToPageDDMFormRuleAction;
 	}
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddlFormRuleSerializerContext) {
 
 		return String.format(
 			_functionCallBinaryExpressionFormat, "jumpPage",
@@ -41,6 +41,6 @@ public class JumpToPageDDLFormRuleActionSerializer
 	private static final String _functionCallBinaryExpressionFormat =
 		"%s(%s, %s)";
 
-	private final JumpToPageDDLFormRuleAction _jumpToPageDDLFormRuleAction;
+	private final JumpToPageDDMFormRuleAction _jumpToPageDDLFormRuleAction;
 
 }

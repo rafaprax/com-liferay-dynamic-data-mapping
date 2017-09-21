@@ -14,13 +14,13 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRule;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleCondition;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.AutoFillDDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.CalculateDDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.DefaultDDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.JumpToPageDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleCondition;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.AutoFillDDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.CalculateDDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.DefaultDDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.JumpToPageDDMFormRuleAction;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONDeserializer;
@@ -37,17 +37,17 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Rafael Praxedes
  */
-@Component(immediate = true, service = DDLFormRuleDeserializer.class)
-public class DDLFormRuleDeserializer {
+@Component(immediate = true, service = DDMFormRuleDeserializer.class)
+public class DDMFormRuleDeserializer {
 
-	public List<DDLFormRule> deserialize(String rules) throws PortalException {
+	public List<DDMFormRule> deserialize(String rules) throws PortalException {
 		JSONArray rulesJSONArray = _jsonFactory.createJSONArray(rules);
 
-		List<DDLFormRule> ddlFormRules = new ArrayList<>(
+		List<DDMFormRule> ddlFormRules = new ArrayList<>(
 			rulesJSONArray.length());
 
 		for (int i = 0; i < rulesJSONArray.length(); i++) {
-			DDLFormRule ddlFormRule = deserializeDDLFormRule(
+			DDMFormRule ddlFormRule = deserializeDDLFormRule(
 				rulesJSONArray.getJSONObject(i));
 
 			ddlFormRules.add(ddlFormRule);
@@ -56,15 +56,15 @@ public class DDLFormRuleDeserializer {
 		return ddlFormRules;
 	}
 
-	protected DDLFormRule deserializeDDLFormRule(JSONObject ruleJSONObject) {
-		DDLFormRule ddlFormRule = new DDLFormRule();
+	protected DDMFormRule deserializeDDLFormRule(JSONObject ruleJSONObject) {
+		DDMFormRule ddlFormRule = new DDMFormRule();
 
-		List<DDLFormRuleAction> actions = deserializeDDLFormRuleActions(
+		List<DDMFormRuleAction> actions = deserializeDDLFormRuleActions(
 			ruleJSONObject.getJSONArray("actions"));
 
 		ddlFormRule.setDDLFormRuleActions(actions);
 
-		List<DDLFormRuleCondition> conditions =
+		List<DDMFormRuleCondition> conditions =
 			deserializeDDLFormRuleConditions(
 				ruleJSONObject.getJSONArray("conditions"));
 
@@ -76,7 +76,7 @@ public class DDLFormRuleDeserializer {
 		return ddlFormRule;
 	}
 
-	protected <T extends DDLFormRuleAction> DDLFormRuleAction
+	protected <T extends DDMFormRuleAction> DDMFormRuleAction
 		deserializeDDLFormRuleAction(
 			JSONObject actionJSONObject, Class<T> targetClass) {
 
@@ -87,20 +87,20 @@ public class DDLFormRuleDeserializer {
 			actionJSONObject.toJSONString(), targetClass);
 	}
 
-	protected List<DDLFormRuleAction> deserializeDDLFormRuleActions(
+	protected List<DDMFormRuleAction> deserializeDDLFormRuleActions(
 		JSONArray actionsJSONArray) {
 
-		List<DDLFormRuleAction> ddlFormRuleActions = new ArrayList<>();
+		List<DDMFormRuleAction> ddlFormRuleActions = new ArrayList<>();
 
 		for (int i = 0; i < actionsJSONArray.length(); i++) {
 			JSONObject actionJSONObject = actionsJSONArray.getJSONObject(i);
 
 			String action = actionJSONObject.getString("action");
 
-			Class<? extends DDLFormRuleAction> clazz =
+			Class<? extends DDMFormRuleAction> clazz =
 				getDDLFormRuleActionClass(action);
 
-			DDLFormRuleAction ddlFormRuleAction = deserializeDDLFormRuleAction(
+			DDMFormRuleAction ddlFormRuleAction = deserializeDDLFormRuleAction(
 				actionJSONObject, clazz);
 
 			ddlFormRuleActions.add(ddlFormRuleAction);
@@ -109,32 +109,32 @@ public class DDLFormRuleDeserializer {
 		return ddlFormRuleActions;
 	}
 
-	protected List<DDLFormRuleCondition> deserializeDDLFormRuleConditions(
+	protected List<DDMFormRuleCondition> deserializeDDLFormRuleConditions(
 		JSONArray conditionsJSONArray) {
 
-		JSONDeserializer<DDLFormRuleCondition[]> jsonDeserializer =
+		JSONDeserializer<DDMFormRuleCondition[]> jsonDeserializer =
 			_jsonFactory.createJSONDeserializer();
 
-		DDLFormRuleCondition[] ruleConditions = jsonDeserializer.deserialize(
-			conditionsJSONArray.toJSONString(), DDLFormRuleCondition[].class);
+		DDMFormRuleCondition[] ruleConditions = jsonDeserializer.deserialize(
+			conditionsJSONArray.toJSONString(), DDMFormRuleCondition[].class);
 
 		return ListUtil.toList(ruleConditions);
 	}
 
-	protected Class<? extends DDLFormRuleAction> getDDLFormRuleActionClass(
+	protected Class<? extends DDMFormRuleAction> getDDLFormRuleActionClass(
 		String action) {
 
 		if (action.equals("auto-fill")) {
-			return AutoFillDDLFormRuleAction.class;
+			return AutoFillDDMFormRuleAction.class;
 		}
 		else if (action.equals("calculate")) {
-			return CalculateDDLFormRuleAction.class;
+			return CalculateDDMFormRuleAction.class;
 		}
 		else if (action.equals("jump-to-page")) {
-			return JumpToPageDDLFormRuleAction.class;
+			return JumpToPageDDMFormRuleAction.class;
 		}
 		else {
-			return DefaultDDLFormRuleAction.class;
+			return DefaultDDMFormRuleAction.class;
 		}
 	}
 

@@ -17,9 +17,9 @@ package com.liferay.dynamic.data.mapping.form.builder.internal.converter.seriali
 /**
  * @author Leonardo Barros
  */
-public interface DDLFormRuleActionSerializer {
+public interface DDMFormRuleActionSerializer {
 
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext);
+		DDMFormRuleSerializerContext ddlFormRuleSerializerContext);
 
 }

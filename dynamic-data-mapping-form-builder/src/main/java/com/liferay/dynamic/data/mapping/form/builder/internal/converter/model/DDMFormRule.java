@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * @author Marcellus Tavares
  */
-public class DDLFormRule {
+public class DDMFormRule {
 
 	@Override
 	public boolean equals(Object obj) {
@@ -32,11 +32,11 @@ public class DDLFormRule {
 			return true;
 		}
 
-		if (!(obj instanceof DDLFormRule)) {
+		if (!(obj instanceof DDMFormRule)) {
 			return false;
 		}
 
-		DDLFormRule ddlFormRule = (DDLFormRule)obj;
+		DDMFormRule ddlFormRule = (DDMFormRule)obj;
 
 		if (Objects.equals(
 				_ddlFormRuleActions, ddlFormRule._ddlFormRuleActions) &&
@@ -51,12 +51,12 @@ public class DDLFormRule {
 	}
 
 	@JSON(name = "actions")
-	public List<DDLFormRuleAction> getDDLFormRuleActions() {
+	public List<DDMFormRuleAction> getDDLFormRuleActions() {
 		return _ddlFormRuleActions;
 	}
 
 	@JSON(name = "conditions")
-	public List<DDLFormRuleCondition> getDDLFormRuleConditions() {
+	public List<DDMFormRuleCondition> getDDLFormRuleConditions() {
 		return _ddlFormRuleConditions;
 	}
 
@@ -75,13 +75,13 @@ public class DDLFormRule {
 	}
 
 	public void setDDLFormRuleActions(
-		List<DDLFormRuleAction> ddlFormRuleActions) {
+		List<DDMFormRuleAction> ddlFormRuleActions) {
 
 		_ddlFormRuleActions = ddlFormRuleActions;
 	}
 
 	public void setDDLFormRuleConditions(
-		List<DDLFormRuleCondition> ddlFormRuleConditions) {
+		List<DDMFormRuleCondition> ddlFormRuleConditions) {
 
 		_ddlFormRuleConditions = ddlFormRuleConditions;
 	}
@@ -90,8 +90,8 @@ public class DDLFormRule {
 		_logicalOperator = logicalOperator;
 	}
 
-	private List<DDLFormRuleAction> _ddlFormRuleActions = new ArrayList<>();
-	private List<DDLFormRuleCondition> _ddlFormRuleConditions =
+	private List<DDMFormRuleAction> _ddlFormRuleActions = new ArrayList<>();
+	private List<DDMFormRuleCondition> _ddlFormRuleConditions =
 		new ArrayList<>();
 	private String _logicalOperator = "AND";
 

@@ -14,11 +14,16 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRule;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleAction;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDLFormRuleCondition;
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDLFormRuleSerializerContext;
-import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.expression.DDMExpression;
+import com.liferay.dynamic.data.mapping.expression.DDMExpressionException;
+import com.liferay.dynamic.data.mapping.expression.DDMExpressionFactory;
+import com.liferay.dynamic.data.mapping.expression.model.Expression;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.DDMFormRuleCondition;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer.DDMFormRuleSerializerContext;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.visitor.ActionExpressionVisitor;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.visitor.ConditionExpressionVisitor;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -33,36 +38,61 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Leonardo Barros
  * @author Marcellus Tavares
  */
-@Component(immediate = true, service = DDLFormRuleToDDMFormRuleConverter.class)
-public class DDLFormRuleToDDMFormRuleConverter {
+@Component(immediate = true, service = DDMFormRuleConverter.class)
+public class DDMFormRuleConverter {
 
 	public List<DDMFormRule> convert(
-		List<DDLFormRule> ddlFormRules,
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		List<com.liferay.dynamic.data.mapping.model.DDMFormRule> ddmFormRules) {
 
-		List<DDMFormRule> ddmFormRules = new ArrayList<>();
+		List<DDMFormRule> ddlFormRules = new ArrayList<>();
 
-		for (DDLFormRule ddlFormRule : ddlFormRules) {
-			ddmFormRules.add(
-				convertRule(ddlFormRule, ddlFormRuleSerializerContext));
+		for (com.liferay.dynamic.data.mapping.model.DDMFormRule ddmFormRule :
+				ddmFormRules) {
+
+			ddlFormRules.add(convertRule(ddmFormRule));
 		}
 
-		return ddmFormRules;
+		return ddlFormRules;
+	}
+
+	public List<com.liferay.dynamic.data.mapping.model.DDMFormRule> convert(
+		List<DDMFormRule> ddlFormRules,
+		DDMFormRuleSerializerContext ddlFormRuleSerializerContext) {
+
+		Stream<DDMFormRule> stream = ddlFormRules.stream();
+
+		Stream<com.liferay.dynamic.data.mapping.model.DDMFormRule>
+			convertedFormRulesStream = stream.map(
+				formRule -> convertRule(
+					formRule, ddlFormRuleSerializerContext));
+
+		return convertedFormRulesStream.collect(Collectors.toList());
+	}
+
+	protected DDMFormRuleAction convertAction(String actionExpressionString) {
+		Expression actionExpression = createExpression(actionExpressionString);
+
+		ActionExpressionVisitor actionExpressionVisitor =
+			new ActionExpressionVisitor();
+
+		return (DDMFormRuleAction)actionExpression.accept(
+			actionExpressionVisitor);
 	}
 
 	protected String convertCondition(
-		DDLFormRuleCondition ddlFormRuleCondition) {
+		DDMFormRuleCondition ddlFormRuleCondition) {
 
 		String operator = ddlFormRuleCondition.getOperator();
 
 		String functionName = _operatorFunctionNameMap.get(operator);
 
-		List<DDLFormRuleCondition.Operand> operands =
+		List<DDMFormRuleCondition.Operand> operands =
 			ddlFormRuleCondition.getOperands();
 
 		if (functionName == null) {
@@ -82,7 +112,7 @@ public class DDLFormRuleToDDMFormRuleConverter {
 
 	protected String convertConditions(
 		String logicalOperator,
-		List<DDLFormRuleCondition> ddlFormRuleConditions) {
+		List<DDMFormRuleCondition> ddlFormRuleConditions) {
 
 		if (ddlFormRuleConditions.size() == 1) {
 			return convertCondition(ddlFormRuleConditions.get(0));
@@ -90,7 +120,7 @@ public class DDLFormRuleToDDMFormRuleConverter {
 
 		StringBundler sb = new StringBundler(ddlFormRuleConditions.size() * 4);
 
-		for (DDLFormRuleCondition ddlFormRuleCondition :
+		for (DDMFormRuleCondition ddlFormRuleCondition :
 				ddlFormRuleConditions) {
 
 			sb.append(convertCondition(ddlFormRuleCondition));
@@ -104,7 +134,7 @@ public class DDLFormRuleToDDMFormRuleConverter {
 		return sb.toString();
 	}
 
-	protected String convertOperand(DDLFormRuleCondition.Operand operand) {
+	protected String convertOperand(DDMFormRuleCondition.Operand operand) {
 		if (Objects.equals("field", operand.getType())) {
 			return String.format(
 				_functionCallUnaryExpressionFormat, "getValue",
@@ -132,11 +162,11 @@ public class DDLFormRuleToDDMFormRuleConverter {
 	}
 
 	protected String convertOperands(
-		List<DDLFormRuleCondition.Operand> operands) {
+		List<DDMFormRuleCondition.Operand> operands) {
 
 		StringBundler sb = new StringBundler(operands.size());
 
-		for (DDLFormRuleCondition.Operand operand : operands) {
+		for (DDMFormRuleCondition.Operand operand : operands) {
 			sb.append(convertOperand(operand));
 			sb.append(StringPool.COMMA_AND_SPACE);
 		}
@@ -147,27 +177,39 @@ public class DDLFormRuleToDDMFormRuleConverter {
 	}
 
 	protected DDMFormRule convertRule(
-		DDLFormRule ddlFormRule,
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		com.liferay.dynamic.data.mapping.model.DDMFormRule ddmFormRule) {
+
+		DDMFormRule ddlFormRule = new DDMFormRule();
+
+		setDDLFormRuleConditions(ddlFormRule, ddmFormRule.getCondition());
+		setDDLFormRuleActions(ddlFormRule, ddmFormRule.getActions());
+
+		return ddlFormRule;
+	}
+
+	protected com.liferay.dynamic.data.mapping.model.DDMFormRule convertRule(
+		DDMFormRule ddmFormRule,
+		DDMFormRuleSerializerContext ddlFormRuleSerializerContext) {
 
 		String condition = convertConditions(
-			ddlFormRule.getLogicalOperator(),
-			ddlFormRule.getDDLFormRuleConditions());
+			ddmFormRule.getLogicalOperator(),
+			ddmFormRule.getDDLFormRuleConditions());
 
 		List<String> actions = new ArrayList<>();
 
-		for (DDLFormRuleAction ddlFormRuleAction :
-				ddlFormRule.getDDLFormRuleActions()) {
+		for (DDMFormRuleAction ddlFormRuleAction :
+				ddmFormRule.getDDLFormRuleActions()) {
 
 			actions.add(
 				ddlFormRuleAction.serialize(ddlFormRuleSerializerContext));
 		}
 
-		return new DDMFormRule(condition, actions);
+		return new com.liferay.dynamic.data.mapping.model.DDMFormRule(
+			condition, actions);
 	}
 
 	protected String createCondition(
-		String functionName, List<DDLFormRuleCondition.Operand> operands) {
+		String functionName, List<DDMFormRuleCondition.Operand> operands) {
 
 		if (Objects.equals(functionName, "belongsTo")) {
 			operands.remove(0);
@@ -178,6 +220,22 @@ public class DDLFormRuleToDDMFormRuleConverter {
 			convertOperands(operands));
 	}
 
+	protected Expression createExpression(String expressionString) {
+		try {
+			DDMExpression<Boolean> ddmExpression =
+				ddmExpressionFactory.createBooleanDDMExpression(
+					expressionString);
+
+			return ddmExpression.getModel();
+		}
+		catch (DDMExpressionException ddmee) {
+			throw new IllegalStateException(
+				String.format(
+					"Unable to parse expression \"%s\"", expressionString),
+				ddmee);
+		}
+	}
+
 	protected boolean isNumericConstant(String operandType) {
 		if (operandType.equals("integer") || operandType.equals("double")) {
 			return true;
@@ -185,6 +243,38 @@ public class DDLFormRuleToDDMFormRuleConverter {
 
 		return false;
 	}
+
+	protected void setDDLFormRuleActions(
+		DDMFormRule ddlFormRule, List<String> actions) {
+
+		List<DDMFormRuleAction> ddlFormRuleActions = new ArrayList<>();
+
+		for (String action : actions) {
+			ddlFormRuleActions.add(convertAction(action));
+		}
+
+		ddlFormRule.setDDLFormRuleActions(ddlFormRuleActions);
+	}
+
+	protected void setDDLFormRuleConditions(
+		DDMFormRule ddlFormRule, String conditionExpressionString) {
+
+		Expression conditionExpression = createExpression(
+			conditionExpressionString);
+
+		ConditionExpressionVisitor conditionExpressionVisitor =
+			new ConditionExpressionVisitor();
+
+		conditionExpression.accept(conditionExpressionVisitor);
+
+		ddlFormRule.setDDLFormRuleConditions(
+			conditionExpressionVisitor.getConditions());
+		ddlFormRule.setLogicalOperator(
+			conditionExpressionVisitor.getLogicalOperator());
+	}
+
+	@Reference
+	protected DDMExpressionFactory ddmExpressionFactory;
 
 	private static final String _comparisonExpressionFormat = "%s %s %s";
 	private static final String _functionCallUnaryExpressionFormat = "%s(%s)";

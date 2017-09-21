@@ -14,7 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.converter.serializer;
 
-import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.DefaultDDLFormRuleAction;
+import com.liferay.dynamic.data.mapping.form.builder.internal.converter.model.action.DefaultDDMFormRuleAction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,18 +22,18 @@ import java.util.Map;
 /**
  * @author Leonardo Barros
  */
-public class DefaultDDLFormRuleActionSerializer
-	implements DDLFormRuleActionSerializer {
+public class DefaultDDMFormRuleActionSerializer
+	implements DDMFormRuleActionSerializer {
 
-	public DefaultDDLFormRuleActionSerializer(
-		DefaultDDLFormRuleAction defaultDDLFormRuleAction) {
+	public DefaultDDMFormRuleActionSerializer(
+		DefaultDDMFormRuleAction defaultDDMFormRuleAction) {
 
-		_defaultDefaultDDLFormRuleAction = defaultDDLFormRuleAction;
+		_defaultDefaultDDLFormRuleAction = defaultDDMFormRuleAction;
 	}
 
 	@Override
 	public String serialize(
-		DDLFormRuleSerializerContext ddlFormRuleSerializerContext) {
+		DDMFormRuleSerializerContext ddlFormRuleSerializerContext) {
 
 		String functionName = _actionBooleanFunctionNameMap.get(
 			_defaultDefaultDDLFormRuleAction.getAction());
@@ -54,6 +54,6 @@ public class DefaultDDLFormRuleActionSerializer
 		_actionBooleanFunctionNameMap.put("show", "setVisible");
 	}
 
-	private final DefaultDDLFormRuleAction _defaultDefaultDDLFormRuleAction;
+	private final DefaultDDMFormRuleAction _defaultDefaultDDLFormRuleAction;
 
 }
