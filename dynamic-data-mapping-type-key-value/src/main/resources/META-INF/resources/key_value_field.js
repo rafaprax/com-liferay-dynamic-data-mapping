@@ -146,9 +146,7 @@ AUI.add(
 					_afterValueChangeInput: function(event) {
 						var instance = this;
 
-						if (!instance.get('generationLocked')) {
-							instance.set('key', instance.normalizeKey(event.newVal));
-						}
+						instance.set('key', instance.normalizeKey(event.newVal));
 					},
 
 					_getKeyInputSize: function(str) {
