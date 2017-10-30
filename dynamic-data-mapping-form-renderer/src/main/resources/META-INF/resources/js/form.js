@@ -87,6 +87,14 @@ AUI.add(
 							serializedFormContext: JSON.stringify(instance.get('context'))
 						};
 					},
+					
+					getFormId: function() {
+						var instance = this;
+						
+						var formNode = instance.getFormNode();
+						
+						return formNode.getData('formId');
+					},
 
 					getFormNode: function() {
 						var instance = this;
@@ -134,7 +142,16 @@ AUI.add(
 
 									instance.showLoadingFeedback();
 
+									Liferay.fire("ddmFormSubmit", {
+										formId: instance.getFormId()
+									});
+
 									Liferay.Util.submitForm(formNode);
+								}
+								else {
+									Liferay.fire("ddmFormValidationError", {
+										formId: instance.getFormId()
+									});
 								}
 							}
 						);
