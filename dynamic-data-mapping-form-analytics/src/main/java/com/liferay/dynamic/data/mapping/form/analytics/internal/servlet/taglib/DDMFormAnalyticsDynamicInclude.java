@@ -29,6 +29,7 @@ import org.osgi.service.component.annotations.Reference;
  */
 @Component(immediate = true, service = DynamicInclude.class)
 public class DDMFormAnalyticsDynamicInclude extends BaseJSPDynamicInclude {
+
 	@Override
 	public void register(DynamicIncludeRegistry dynamicIncludeRegistry) {
 		dynamicIncludeRegistry.register(
@@ -56,4 +57,5 @@ public class DDMFormAnalyticsDynamicInclude extends BaseJSPDynamicInclude {
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		DDMFormAnalyticsDynamicInclude.class);
+
 }

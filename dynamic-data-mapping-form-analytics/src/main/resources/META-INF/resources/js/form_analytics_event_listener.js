@@ -1,40 +1,7 @@
 Liferay.on(
-	'ddmFormView', function(event) {
+	'ddmFieldBlur', function(event) {
 		DDMFormAnalytics.track(
-			'FORM_VIEW',
-			{
-				id: event.formId
-			}
-		);
-	}
-);
-
-Liferay.on(
-	'ddmFormSubmit', function(event) {
-		DDMFormAnalytics.track(
-			'FORM_SUBMIT',
-			{
-				id: event.formId
-			}
-		);
-	}
-);
-
-Liferay.on(
-	'ddmFormValidationError', function(event) {
-		DDMFormAnalytics.track(
-			'FORM_VALIDATION_ERROR',
-			{
-				id: event.formId
-			}
-		);
-	}
-);
-
-Liferay.on(
-	'ddmFieldValueChange', function(event) {
-		DDMFormAnalytics.track(
-			'FIELD_VALUE_CHANGE',
+			'FIELD_BLUR',
 			{
 				fieldName: event.fieldName,
 				formId: event.formId
@@ -56,12 +23,70 @@ Liferay.on(
 );
 
 Liferay.on(
-	'ddmFieldBlur', function(event) {
+	'ddmFieldStartedFilling', function(event) {
 		DDMFormAnalytics.track(
-			'FIELD_BLUR',
+			'FIELD_STARTED_FILLING',
 			{
 				fieldName: event.fieldName,
 				formId: event.formId
+			}
+		);
+	}
+);
+
+Liferay.on(
+	'ddmFormPageShow', function(event) {
+		DDMFormAnalytics.track(
+			'FORM_PAGE_SHOW',
+			{
+				formId: event.formId,
+				page: event.page
+			}
+		);
+	}
+);
+
+Liferay.on(
+	'ddmFormPageHide', function(event) {
+		DDMFormAnalytics.track(
+			'FORM_PAGE_HIDE',
+			{
+				formId: event.formId,
+				page: event.page
+			}
+		);
+	}
+);
+
+Liferay.on(
+	'ddmFormValidationError', function(event) {
+		DDMFormAnalytics.track(
+			'FORM_VALIDATION_ERROR',
+			{
+				formId: event.formId
+			}
+		);
+	}
+);
+
+Liferay.on(
+	'ddmFormView', function(event) {
+		DDMFormAnalytics.track(
+			'FORM_VIEW',
+			{
+				formId: event.formId
+			}
+		);
+	}
+);
+
+Liferay.on(
+	'ddmFormSubmit', function(event) {
+		DDMFormAnalytics.track(
+			'FORM_SUBMIT',
+			{
+				formId: event.formId,
+				page: event.page
 			}
 		);
 	}

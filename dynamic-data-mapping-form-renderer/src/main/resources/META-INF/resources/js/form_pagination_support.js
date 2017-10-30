@@ -189,6 +189,17 @@ AUI.add(
 						}
 					).render();
 				}
+
+				var formId = instance.getFormId();
+
+				var page = instance.getCurrentPage();
+
+				if (formId > 0 && page > 0) {
+					Liferay.fire("ddmFormPageShow", {
+						formId: formId,
+						page: page
+					});
+				}
 			},
 
 			_afterPaginationPageChange: function(event) {
@@ -212,6 +223,20 @@ AUI.add(
 
 				if (firstField) {
 					firstField.focus();
+				}
+
+				var formId = instance.getFormId();
+
+				if (formId > 0) {
+					Liferay.fire("ddmFormPageHide", {
+						formId: formId,
+						page: event.prevVal
+					});
+
+					Liferay.fire("ddmFormPageShow", {
+						formId: formId,
+						page: event.newVal
+					});
 				}
 			},
 

@@ -94,12 +94,30 @@ AUI.add(
 				var instance = this;
 
 				instance.fire('blur', instance._getEventPayload(event));
+
+				var root = instance.getRoot();
+
+				if (root) {
+					Liferay.fire("ddmFieldBlur", {
+						fieldName: instance.get("fieldName"),
+						formId: root.getFormId()
+					});
+				}
 			},
 
 			_onInputFocus: function(event) {
 				var instance = this;
 
 				instance.fire('focus', instance._getEventPayload(event));
+
+				var root = instance.getRoot();
+
+				if (root) {
+					Liferay.fire("ddmFieldFocus", {
+						fieldName: instance.get("fieldName"),
+						formId: root.getFormId()
+					});
+				}
 			},
 
 			_onValueChange: function(event) {
@@ -108,6 +126,19 @@ AUI.add(
 				var value = instance.getValue();
 
 				instance.set('value', value);
+
+				if (!instance.get('startedFilling')) {
+					instance.set('startedFilling', true);
+
+					var root = instance.getRoot();
+
+					if (root) {
+						Liferay.fire("ddmFieldStartedFilling", {
+							fieldName: instance.get("fieldName"),
+							formId: root.getFormId()
+						});
+					}
+				}
 			}
 		};
 
