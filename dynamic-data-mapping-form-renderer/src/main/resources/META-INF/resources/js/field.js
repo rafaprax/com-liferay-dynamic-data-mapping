@@ -78,6 +78,10 @@ AUI.add(
 						value: true
 					},
 
+					startedFilling: {
+						value: false
+					},
+
 					type: {
 						value: ''
 					},
@@ -116,15 +120,6 @@ AUI.add(
 				NAME: 'liferay-ddm-form-renderer-field',
 
 				prototype: {
-					initializer: function() {
-						var instance = this;
-
-						instance._eventHandlers = [
-							instance.on('blur', instance._onBlur),
-							instance.on('focus', instance._onFocus)
-						];
-					},
-
 					destructor: function() {
 						var instance = this;
 
@@ -274,7 +269,7 @@ AUI.add(
 
 						return container.contains(document.activeElement);
 					},
-					
+
 					render: function(target) {
 						var instance = this;
 
@@ -384,28 +379,6 @@ AUI.add(
 						}
 
 						return container;
-					},
-					
-					_onBlur: function() {
-						var instance = this;
-						
-						var root = instance.getRoot();
-
-						Liferay.fire("ddmFieldBlur", {
-							fieldName: instance.get("fieldName"),
-							formId: root.getFormId()
-						});
-					},
-					
-					_onFocus: function() {
-						var instance = this;
-						
-						var root = instance.getRoot();
-
-						Liferay.fire("ddmFieldFocus", {
-							fieldName: instance.get("fieldName"),
-							formId: root.getFormId()
-						});
 					},
 
 					_setParent: function(val) {

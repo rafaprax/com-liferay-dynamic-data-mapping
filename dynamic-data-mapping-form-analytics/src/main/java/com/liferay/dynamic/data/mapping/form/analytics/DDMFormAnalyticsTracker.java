@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,7 +11,17 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<script src="/o/dynamic-data-mapping-form-analytics/js/form_analytics.js" type="text/javascript"></script>
-<script src="/o/dynamic-data-mapping-form-analytics/js/form_analytics_event_listener.js" type="text/javascript"></script>
+package com.liferay.dynamic.data.mapping.form.analytics;
+
+import aQute.bnd.annotation.ProviderType;
+
+/**
+ * @author Leonardo Barros
+ */
+@ProviderType
+public interface DDMFormAnalyticsTracker {
+
+	public DDMFormAnalytics getMetric(String metric);
+
+}

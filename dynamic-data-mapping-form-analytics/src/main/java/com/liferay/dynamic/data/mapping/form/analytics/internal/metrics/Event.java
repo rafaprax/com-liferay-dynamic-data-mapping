@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,7 +11,14 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<script src="/o/dynamic-data-mapping-form-analytics/js/form_analytics.js" type="text/javascript"></script>
-<script src="/o/dynamic-data-mapping-form-analytics/js/form_analytics_event_listener.js" type="text/javascript"></script>
+package com.liferay.dynamic.data.mapping.form.analytics.internal.metrics;
+
+/**
+ * @author Leonardo Barros
+ */
+public enum Event {
+
+	FIELD_BLUR, FIELD_FOCUS, FIELD_STARTED_FILLING, FORM_PAGE_SHOW,
+	FORM_PAGE_HIDE, FORM_VALIDATION_ERROR, FORM_VIEW, FORM_SUBMIT
+}

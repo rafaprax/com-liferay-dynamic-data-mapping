@@ -14,12 +14,19 @@
 
 package com.liferay.dynamic.data.mapping.form.analytics.internal.servlet;
 
+import com.liferay.dynamic.data.mapping.form.analytics.DDMFormAnalytics;
+import com.liferay.dynamic.data.mapping.form.analytics.DDMFormAnalyticsTracker;
+import com.liferay.dynamic.data.mapping.form.analytics.internal.metrics.DDMFormAnalyticsEventEntry;
+import com.liferay.dynamic.data.mapping.form.analytics.internal.metrics.Event;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
+
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,95 +54,62 @@ import org.osgi.service.component.annotations.Reference;
 public class DDMFormAnalyticsServlet extends HttpServlet {
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(
+			HttpServletRequest request, HttpServletResponse response)
+		throws IOException, ServletException {
 
-		String metric = ParamUtil.getString(request, "metric");
-		long formId = ParamUtil.getLong(request, "formId");
+		try {
+			DDMFormAnalytics ddmFormAnalytics =
+				_ddmFormAnalyticsTracker.getMetric(
+					ParamUtil.getString(request, "metric"));
+
+			if (ddmFormAnalytics == null) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+
+				return;
+			}
+
+			JSONObject jsonObject = ddmFormAnalytics.getData(
+				_ddmFormAnalyticsEventEntries, request);
+
+			ServletResponseUtil.write(response, jsonObject.toJSONString());
+		}
+		catch (Exception e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+
+			return;
+		}
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
+	protected void doPost(
+			HttpServletRequest request, HttpServletResponse response)
+		throws IOException, ServletException {
+
 		try {
-			EVENT event = EVENT.valueOf(ParamUtil.getString(request, "event"));
+			Event event = Event.valueOf(ParamUtil.getString(request, "event"));
 
 			long userId = ParamUtil.getLong(request, "userId");
 
 			JSONObject attributes = _jsonFactory.createJSONObject(
 				ParamUtil.getString(request, "attributes"));
 
-			_ddmFormAnalyticsEvent.add(
-				new DDMFormAnalyticsEvent(
-					event, LocalDateTime.now(), attributes, userId));
-			
-		} catch (Exception e) {
+			_ddmFormAnalyticsEventEntries.add(
+				new DDMFormAnalyticsEventEntry(
+					userId, attributes, event, LocalDateTime.now()));
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	private static final List<DDMFormAnalyticsEventEntry>
+		_ddmFormAnalyticsEventEntries = new ArrayList<>();
+
+	@Reference
+	private DDMFormAnalyticsTracker _ddmFormAnalyticsTracker;
+
 	@Reference
 	private JSONFactory _jsonFactory;
-
-	private static final long serialVersionUID = 1L;
-
-	private static List<DDMFormAnalyticsEvent> _ddmFormAnalyticsEvent = new ArrayList<>();
-
-	private enum EVENT {
-		FIELD_BLUR,
-		FIELD_FOCUS,
-		FIELD_VALUE_CHANGE,
-		FORM_VIEW,
-		FORM_SUBMIT
-	};
-
-	protected class DDMFormAnalyticsEvent implements Comparable<DDMFormAnalyticsEvent>{
-		private EVENT event;
-		private long userId;
-		private LocalDateTime timestamp;
-		private JSONObject attributes;
-		
-		public DDMFormAnalyticsEvent(
-			EVENT event, LocalDateTime timestamp, JSONObject attributes, long userId) {
-			this.event = event;
-			this.timestamp = timestamp;
-			this.userId = userId;
-			this.attributes = attributes;
-		}
-
-		public long getUserId() {
-			return userId;
-		}
-
-		public void setUserId(long userId) {
-			this.userId = userId;
-		}
-
-		public EVENT getEvent() {
-			return event;
-		}
-		public void setEvent(EVENT event) {
-			this.event = event;
-		}
-		public LocalDateTime getTimestamp() {
-			return timestamp;
-		}
-		public void setTimestamp(LocalDateTime timestamp) {
-			this.timestamp = timestamp;
-		}
-		public JSONObject getAttributes() {
-			return attributes;
-		}
-		public void setAttributes(JSONObject attributes) {
-			this.attributes = attributes;
-		}
-
-		@Override
-		public int compareTo(DDMFormAnalyticsEvent other) {
-	
-			return this.getTimestamp().compareTo(other.getTimestamp());
-		}
-	}
 
 }
