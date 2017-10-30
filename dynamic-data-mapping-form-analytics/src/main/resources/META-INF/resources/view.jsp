@@ -1,0 +1,2 @@
+<script src="/o/dynamic-data-mapping-form-analytics/js/form_analytics.js" type="text/javascript"></script>
+<script src="/o/dynamic-data-mapping-form-analytics/js/form_analytics_event_listener.js" type="text/javascript"></script>
