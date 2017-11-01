@@ -35,6 +35,18 @@ Liferay.on(
 );
 
 Liferay.on(
+	'ddmFieldValidationError', function(event) {
+		DDMFormAnalytics.track(
+			'FIELD_VALIDATION_ERROR',
+			{
+				fieldName: event.fieldName,
+				formId: event.formId
+			}
+		);
+	}
+);
+
+Liferay.on(
 	'ddmFormPageShow', function(event) {
 		DDMFormAnalytics.track(
 			'FORM_PAGE_SHOW',
