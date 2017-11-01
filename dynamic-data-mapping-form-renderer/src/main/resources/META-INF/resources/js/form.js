@@ -93,6 +93,10 @@ AUI.add(
 
 						var formNode = instance.getFormNode();
 
+						if (!formNode) {
+							return 0;
+						}
+
 						return formNode.getData('formId');
 					},
 
