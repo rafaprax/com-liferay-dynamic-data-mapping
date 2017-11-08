@@ -11,9 +11,33 @@ Liferay.on(
 );
 
 Liferay.on(
+	'ddmFieldEmpty', function(event) {
+		DDMFormAnalytics.track(
+			'FIELD_EMPTY',
+			{
+				fieldName: event.fieldName,
+				formId: event.formId
+			}
+		);
+	}
+);
+
+Liferay.on(
 	'ddmFieldFocus', function(event) {
 		DDMFormAnalytics.track(
 			'FIELD_FOCUS',
+			{
+				fieldName: event.fieldName,
+				formId: event.formId
+			}
+		);
+	}
+);
+
+Liferay.on(
+	'ddmFieldLoaded', function(event) {
+		DDMFormAnalytics.track(
+			'FIELD_LOADED',
 			{
 				fieldName: event.fieldName,
 				formId: event.formId

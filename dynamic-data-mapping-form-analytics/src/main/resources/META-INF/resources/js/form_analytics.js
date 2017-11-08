@@ -2,6 +2,10 @@ var DDMFormAnalytics = {
 	track: function(event, attributes) {
 		var instance = this;
 
+		if (!attributes.formId) {
+			return;
+		}
+
 		jQuery.post({
 			url: '/o/dynamic-data-mapping-form-analytics-event/',
 			data: {

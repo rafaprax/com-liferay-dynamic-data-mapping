@@ -9,7 +9,7 @@ AUI.add(
 				var instance = this;
 
 				instance._eventHandlers.push(
-					instance.after(instance._afterEventsRender, instance, 'render')
+					instance.after(instance._afterRender, instance, 'render')
 				);
 
 				instance._domEvents = [];
@@ -73,12 +73,33 @@ AUI.add(
 				instance._bindDefaultEvents();
 			},
 
+			_afterRender: function() {
+				var instance = this;
+
+				instance._afterEventsRender();
+
+				instance._fieldLoaded();
+			},
+
 			_bindDefaultEvents: function() {
 				var instance = this;
 
 				instance.bindInputEvent('blur', instance._onInputBlur, true);
 				instance.bindInputEvent('focus', instance._onInputFocus);
 				instance.bindInputEvent(instance.getChangeEventName(), instance._onValueChange, true);
+			},
+
+			_fieldLoaded: function() {
+				var instance = this;
+				
+				var root = instance.getRoot();
+				
+				if (root && root.getFormId) {
+					Liferay.fire("ddmFieldLoaded", {
+						fieldName: instance.get("fieldName"),
+						formId: root.getFormId()
+					});
+				}
 			},
 
 			_getEventPayload: function(originalEvent) {
@@ -127,16 +148,27 @@ AUI.add(
 
 				instance.set('value', value);
 
-				if (!instance.get('startedFilling')) {
-					instance.set('startedFilling', true);
+				var root = instance.getRoot();
 
-					var root = instance.getRoot();
-
-					if (root) {
+				if (root) {
+					if (!instance.get('startedFilling')) {
+						instance.set('startedFilling', true);
+	
 						Liferay.fire("ddmFieldStartedFilling", {
 							fieldName: instance.get("fieldName"),
 							formId: root.getFormId()
 						});
+					}
+					else {
+
+						if (instance.isEmpty()) {
+							instance.set('startedFilling', false);
+	
+							Liferay.fire("ddmFieldEmpty", {
+								fieldName: instance.get("fieldName"),
+								formId: root.getFormId()
+							});
+						}
 					}
 				}
 			}

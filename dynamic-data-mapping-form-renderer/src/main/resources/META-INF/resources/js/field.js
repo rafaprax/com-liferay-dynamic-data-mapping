@@ -262,6 +262,14 @@ AUI.add(
 						return Lang.String.unescapeHTML(inputNode.val());
 					},
 
+					isEmpty: function() {
+						var instance = this;
+
+						var value = instance.getValue();
+
+						return !value;
+					},
+
 					hasFocus: function() {
 						var instance = this;
 
