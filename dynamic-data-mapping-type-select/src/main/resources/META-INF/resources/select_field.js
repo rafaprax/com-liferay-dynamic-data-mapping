@@ -353,6 +353,19 @@ AUI.add(
 						instance.setValue(value);
 
 						instance.focus();
+
+						if (!instance.get('startedFilling')) {
+							instance.set('startedFilling', true);
+
+							var root = instance.getRoot();
+
+							if (root) {
+								Liferay.fire("ddmFieldStartedFilling", {
+									fieldName: instance.get("fieldName"),
+									formId: root.getFormId()
+								});
+							}
+						}
 					},
 
 					_handleSelectTriggerClick: function(event) {
