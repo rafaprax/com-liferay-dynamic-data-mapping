@@ -362,7 +362,8 @@ AUI.add(
 							if (root) {
 								Liferay.fire("ddmFieldStartedFilling", {
 									fieldName: instance.get("fieldName"),
-									formId: root.getFormId()
+									formId: root.getFormId(),
+									formTransaction: root.getFormTransaction()
 								});
 							}
 						}

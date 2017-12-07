@@ -197,6 +197,7 @@ AUI.add(
 				if (formId > 0 && page > 0) {
 					Liferay.fire("ddmFormPageShow", {
 						formId: formId,
+						formTransaction: instance.getFormTransaction(),
 						page: page
 					});
 				}
@@ -230,11 +231,13 @@ AUI.add(
 				if (formId > 0) {
 					Liferay.fire("ddmFormPageHide", {
 						formId: formId,
+						formTransaction: instance.getFormTransaction(),
 						page: event.prevVal
 					});
 
 					Liferay.fire("ddmFormPageShow", {
 						formId: formId,
+						formTransaction: instance.getFormTransaction(),
 						page: event.newVal
 					});
 				}

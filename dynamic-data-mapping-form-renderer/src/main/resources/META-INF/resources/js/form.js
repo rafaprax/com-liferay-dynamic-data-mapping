@@ -90,6 +90,18 @@ AUI.add(
 
 					getFormId: function() {
 						var instance = this;
+						
+						var formNode = instance.getFormNode();
+						
+						if (!formNode) {
+							return 0;
+						}
+						
+						return formNode.getData('formId');
+					},
+
+					getFormTransaction: function() {
+						var instance = this;
 
 						var formNode = instance.getFormNode();
 
@@ -97,7 +109,7 @@ AUI.add(
 							return 0;
 						}
 
-						return formNode.getData('formId');
+						return formNode.getData('formTransaction');
 					},
 
 					getFormNode: function() {
@@ -148,6 +160,7 @@ AUI.add(
 
 									Liferay.fire("ddmFormSubmit", {
 										formId: instance.getFormId(),
+										formTransaction: instance.getFormTransaction(),
 										page: instance.getCurrentPage() || 0
 									});
 
@@ -155,7 +168,8 @@ AUI.add(
 								}
 								else {
 									Liferay.fire("ddmFormValidationError", {
-										formId: instance.getFormId()
+										formId: instance.getFormId(),
+										formTransaction: instance.getFormTransaction()
 									});
 								}
 							}

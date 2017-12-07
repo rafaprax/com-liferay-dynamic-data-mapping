@@ -97,7 +97,8 @@ AUI.add(
 				if (root && root.getFormId) {
 					Liferay.fire("ddmFieldLoaded", {
 						fieldName: instance.get("fieldName"),
-						formId: root.getFormId()
+						formId: root.getFormId(),
+						formTransaction: root.getFormTransaction()
 					});
 				}
 			},
@@ -121,7 +122,8 @@ AUI.add(
 				if (root) {
 					Liferay.fire("ddmFieldBlur", {
 						fieldName: instance.get("fieldName"),
-						formId: root.getFormId()
+						formId: root.getFormId(),
+						formTransaction: root.getFormTransaction()
 					});
 				}
 			},
@@ -136,7 +138,8 @@ AUI.add(
 				if (root) {
 					Liferay.fire("ddmFieldFocus", {
 						fieldName: instance.get("fieldName"),
-						formId: root.getFormId()
+						formId: root.getFormId(),
+						formTransaction: root.getFormTransaction()
 					});
 				}
 			},
@@ -156,7 +159,8 @@ AUI.add(
 	
 						Liferay.fire("ddmFieldStartedFilling", {
 							fieldName: instance.get("fieldName"),
-							formId: root.getFormId()
+							formId: root.getFormId(),
+							formTransaction: root.getFormTransaction()
 						});
 					}
 					else {
@@ -166,7 +170,8 @@ AUI.add(
 	
 							Liferay.fire("ddmFieldEmpty", {
 								fieldName: instance.get("fieldName"),
-								formId: root.getFormId()
+								formId: root.getFormId(),
+								formTransaction: root.getFormTransaction()
 							});
 						}
 					}

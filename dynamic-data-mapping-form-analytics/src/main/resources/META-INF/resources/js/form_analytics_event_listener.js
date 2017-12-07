@@ -4,7 +4,8 @@ Liferay.on(
 			'FIELD_BLUR',
 			{
 				fieldName: event.fieldName,
-				formId: event.formId
+				formId: event.formId,
+				formTransaction: event.formTransaction
 			}
 		);
 	}
@@ -16,7 +17,8 @@ Liferay.on(
 			'FIELD_EMPTY',
 			{
 				fieldName: event.fieldName,
-				formId: event.formId
+				formId: event.formId,
+				formTransaction: event.formTransaction
 			}
 		);
 	}
@@ -28,7 +30,8 @@ Liferay.on(
 			'FIELD_FOCUS',
 			{
 				fieldName: event.fieldName,
-				formId: event.formId
+				formId: event.formId,
+				formTransaction: event.formTransaction
 			}
 		);
 	}
@@ -40,7 +43,8 @@ Liferay.on(
 			'FIELD_LOADED',
 			{
 				fieldName: event.fieldName,
-				formId: event.formId
+				formId: event.formId,
+				formTransaction: event.formTransaction
 			}
 		);
 	}
@@ -52,7 +56,8 @@ Liferay.on(
 			'FIELD_STARTED_FILLING',
 			{
 				fieldName: event.fieldName,
-				formId: event.formId
+				formId: event.formId,
+				formTransaction: event.formTransaction
 			}
 		);
 	}
@@ -64,7 +69,8 @@ Liferay.on(
 			'FIELD_VALIDATION_ERROR',
 			{
 				fieldName: event.fieldName,
-				formId: event.formId
+				formId: event.formId,
+				formTransaction: event.formTransaction
 			}
 		);
 	}
@@ -76,6 +82,7 @@ Liferay.on(
 			'FORM_PAGE_SHOW',
 			{
 				formId: event.formId,
+				formTransaction: event.formTransaction,
 				page: event.page
 			}
 		);
@@ -88,6 +95,7 @@ Liferay.on(
 			'FORM_PAGE_HIDE',
 			{
 				formId: event.formId,
+				formTransaction: event.formTransaction,
 				page: event.page
 			}
 		);
@@ -99,7 +107,8 @@ Liferay.on(
 		DDMFormAnalytics.track(
 			'FORM_VALIDATION_ERROR',
 			{
-				formId: event.formId
+				formId: event.formId,
+				formTransaction: event.formTransaction
 			}
 		);
 	}
@@ -110,7 +119,8 @@ Liferay.on(
 		DDMFormAnalytics.track(
 			'FORM_VIEW',
 			{
-				formId: event.formId
+				formId: event.formId,
+				formTransaction: event.formTransaction
 			}
 		);
 	}
@@ -122,6 +132,7 @@ Liferay.on(
 			'FORM_SUBMIT',
 			{
 				formId: event.formId,
+				formTransaction: event.formTransaction,
 				page: event.page
 			}
 		);
