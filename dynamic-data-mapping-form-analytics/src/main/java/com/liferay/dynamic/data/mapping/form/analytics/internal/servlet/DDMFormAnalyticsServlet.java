@@ -14,12 +14,16 @@
 
 package com.liferay.dynamic.data.mapping.form.analytics.internal.servlet;
 
+import com.liferay.analytics.data.binding.JSONObjectMapper;
+import com.liferay.analytics.model.AnalyticsEventsMessage;
 import com.liferay.dynamic.data.mapping.form.analytics.DDMFormAnalytics;
 import com.liferay.dynamic.data.mapping.form.analytics.DDMFormAnalyticsTracker;
 import com.liferay.dynamic.data.mapping.form.analytics.internal.metrics.DDMFormAnalyticsEventEntry;
 import com.liferay.dynamic.data.mapping.form.analytics.internal.metrics.Event;
+import com.liferay.dynamic.data.mapping.form.analytics.internal.util.FormsAnalyticsHelper;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.servlet.BrowserSnifferUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
@@ -35,6 +39,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -94,9 +99,18 @@ public class DDMFormAnalyticsServlet extends HttpServlet {
 			JSONObject attributes = _jsonFactory.createJSONObject(
 				ParamUtil.getString(request, "attributes"));
 
-			_ddmFormAnalyticsEventEntries.add(
+			DDMFormAnalyticsEventEntry ddmFormAnalyticsEventEntry =
 				new DDMFormAnalyticsEventEntry(
-					userId, attributes, event, LocalDateTime.now()));
+					userId, attributes, event, LocalDateTime.now());
+
+			_ddmFormAnalyticsEventEntries.add(ddmFormAnalyticsEventEntry);
+
+			FormsAnalyticsHelper formsAnalyticsHelper =
+				new FormsAnalyticsHelper(_jsonObjectMapper);
+
+			formsAnalyticsHelper.sendMessage(
+				userId, event.toString(), request,
+				ddmFormAnalyticsEventEntry);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -111,5 +125,10 @@ public class DDMFormAnalyticsServlet extends HttpServlet {
 
 	@Reference
 	private JSONFactory _jsonFactory;
+
+	@Reference(
+		target = "(model=com.liferay.analytics.model.AnalyticsEventsMessage)"
+	)
+	private JSONObjectMapper<AnalyticsEventsMessage> _jsonObjectMapper;
 
 }
